@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:textStyle="bold"
+        android:id="@+id/loggedInTextView"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:id="@+id/titleBar"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:text="@string/packets"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:textSize="30sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/noPacketNotifier"
+        android:textStyle="bold"
+        android:id="@+id/emptyListTextView"
+        android:layout_gravity="center_horizontal" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@android:id/list"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.93" />
+
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:text="@string/backBtn"
+        android:background="@drawable/black_button"
+        style="@style/button_text"
+        android:layout_gravity="center|bottom"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>

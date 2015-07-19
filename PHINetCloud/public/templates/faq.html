@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PHINet | FAQ</title>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'
+    type='text/css'>
+    <link href="public/static/bootstrap/css/style.css" rel="stylesheet" type=
+    "text/css">
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <div id="logo">
+                <a href="/"><h1>PHINet</h1></a>
+            </div>
+
+            <div class="loginArea">
+                <% if(user) { %><%= user %> | <a href="/logout">logout</a>
+                <% } else { %> <a href="/login">login</a> | <a href=
+                "/signup">signup</a> <% } %>
+            </div>
+
+            <br><br>
+
+            <div id="menubar">
+                <ul id="menu">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    <li class="current">
+                        <a href="/faq">FAQ</a>
+                    </li>
+
+                   <!-- <li>
+                        <a href="/test">Test</a>
+                    </li>--><% if(user) { %>
+
+                    <li>
+                        <a href="/profile">Profile</a>
+                    </li>
+
+                    <li>
+                        <a href="/viewdata">Data</a>
+                    </li>
+                    <% } %>
+                    <% if(user && userIsPatient) { %>
+                    <li >
+                        <a href="/doctors">Doctors</a>
+                    </li>
+                    <% } %>
+                    <% if (user && !userIsPatient) { %>
+                    <li >
+                        <a href="/patients">Patients</a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+
+        <div id="site_content">
+
+            <div id="content">
+
+                <h1>Frequently Asked Questions</h1>
+                <hr>
+                <br>
+
+                <ul>
+                    <li class="large_red">How can I contact you?</li>
+
+                    Please send all queries to <a  class="large_white" >rseales@troy.edu</a>.
+
+                    <br><br>
+                    <li class="large_red">Where can I find documentation?</li>
+
+                    Please refer to our github and its wiki:
+                    <a class="large_white"  href="http://github.com/seales/PHINet">github.com/seales/PHINet</a>.
+
+
+                    <br><br>
+                    <li class="large_red">What types of sensors can you support?</li>
+
+                    We currently only support a HeartBeat Sensor through the camera embedded into the device.
+                    Look for more sensors in the future.
+
+                    <br><br>
+                    <li class="large_red">What happens if content goes stale?</li>
+
+                    Given NDN, dynamic content may have the same name despite there being various versions.
+                    Many open questions still exist here. Currently we do nothing to ensure that content
+                    doesn't go stale. More sophisticated measures may exist in the future.
+
+
+                    <br><br>
+                    <li class="large_red">How do you determine the name of data to request?</li>
+
+                    Content naming, within PHINet, is deterministic due to each component of the name
+                    being known to exist. As such, we can easily construct all names without
+                    implementing longest prefix matching or some other method.
+
+                    <br><br>
+                    <li class="large_red">What are the implications of connecting via my mobile network versus
+                    connecting via WiFi?</li>
+
+                    This is a trouble area since NDN hasn't been deployed. Connecting via your mobile network
+                    will only allow communication with the server while connecting via WiFi makes it possible
+                    to communicate with both the server and any PHINet-enabled device over a LAN.
+
+                    <br><br>
+                    <li class="large_red">Why can't doctors add patients?</li>
+
+                    The current solution (only patients can add doctors) was implemented first
+                    due to it being quick and simple - patients choose to reveal things, doctors
+                    cannot ask. However, more sophisticated mechanisms may be implemented in the future.
+
+                </ul>
+
+                <br>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

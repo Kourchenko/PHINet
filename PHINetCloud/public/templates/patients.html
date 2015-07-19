@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PHINet | Patients</title>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'
+    type='text/css'>
+    <link href="public/static/bootstrap/css/style.css" rel="stylesheet" type=
+    "text/css">
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <div id="logo">
+                <a href="/"><h1>PHINet</h1></a>
+
+            </div>
+
+            <div class="loginArea">
+                <% if(user) { %><%= user %> | <a href="/logout">logout</a>
+                <% } else { %> <a href="/login">login</a> | <a href=
+                "/signup">signup</a> <% } %>
+            </div>
+            
+            <br><br>
+
+            <div id="menubar">
+                <ul id="menu">
+
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    <li>
+                        <a href="/faq">FAQ</a>
+                    </li>
+
+                   <!-- <li >
+                        <a href="/test">Test</a>
+                    </li>--><% if(user) { %>
+
+                    <li>
+                        <a href="/profile">Profile</a>
+                    </li>
+
+                    <li>
+                        <a href="/viewdata">Data</a>
+                    </li>
+                    <% } %>
+                    <% if(user && userIsPatient) { %>
+                    <li >
+                        <a href="/doctors">Doctors</a>
+                    </li>
+                    <% } %>
+                    <% if (user && !userIsPatient) { %>
+                    <li class="current"  >
+                        <a href="/patients">Patients</a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+
+        <div id="site_content">
+            <div id="content">
+
+                <h1>Your Patients</h1>
+                <hr>
+                <br>
+
+                <% if(patients.length > 0)  { %> 
+                 <ul>
+               
+                    <% for(var i=0; i<patients.length; i++) {%>
+                       <li class="large_red"> 
+                            <!-- TODO - provide link to patients data <a class="large_red" href="/viewdata"><%= patients[i]%></a>-->
+                            <%= patients[i]%>
+                    </li>
+                    <% } %>
+
+                </ul>
+                <% } else { %>
+
+                <p class="large_red"> You have no patients</p>
+
+                <% } %>
+                   
+                <br><br>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

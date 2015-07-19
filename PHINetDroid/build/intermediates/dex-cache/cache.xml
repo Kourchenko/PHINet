@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/cseales/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-4438856b072d79fbeb19612dfa5fff80ccd3a167.jar" />
+    </item>
+    <item
+        jar="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/pre-dexed/debug/classes-9f11e5b63435c48cb27f179d8ff4172f6a81fb34.jar" />
+    </item>
+    <item
+        jar="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-709cbed0b3d8ad7d6fe3362f01e9008b66a5f227.jar" />
+    </item>
+    <item
+        jar="/Users/cseales/Desktop/PHINet/PHINetDroid/app/libs/javax.mail.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a6ab2437933757407082cb86aaeb655549296067">
+        <dex dex="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/pre-dexed/debug/javax.mail-e2b07437977e0bfb209982822038193fc75a5a90.jar" />
+    </item>
+    <item
+        jar="/Users/cseales/Desktop/PHINet/PHINetDroid/app/libs/GraphView-4.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="20768335ab718b2a912f9155f9d1893d5fc931ce">
+        <dex dex="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/pre-dexed/debug/GraphView-4.0.0-fef2710654c624d9090a8079736401bb7e48a8bd.jar" />
+    </item>
+    <item
+        jar="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/pre-dexed/debug/classes-3a866de3ec25082c7ca12194930169998dbd362a.jar" />
+    </item>
+    <item
+        jar="/Users/cseales/Desktop/PHINet/PHINetDroid/app/libs/jndn-0.6.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e7e684d8127af92bdc7df966710b4655fb7d1156">
+        <dex dex="/Users/cseales/Desktop/PHINet/PHINetDroid/app/build/intermediates/pre-dexed/debug/jndn-0.6-adee43616356987acdb70fb938dff823883fb866.jar" />
+    </item>
+
+</items>

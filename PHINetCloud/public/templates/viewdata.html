@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PHINet | View Data</title>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'
+          type='text/css'>
+    <link href="/public/static/bootstrap/css/style.css" rel="stylesheet" type=
+            "text/css">
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <div id="logo">
+                <a href="/"><h1>PHINet</h1></a>
+            </div>
+
+            <div class="loginArea">
+                <% if(user) { %><%= user %> | <a href="/logout">logout</a>
+                <% } else { %> <a href="/login">login</a> | <a href=
+                                                                       "/signup">signup</a> <% } %>
+            </div>
+
+            <br><br>
+
+            <div id="menubar">
+                <ul id="menu">
+
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    <li>
+                        <a href="/faq">FAQ</a>
+                    </li>
+<!--
+                    <li>
+                        <a href="/test">Test</a>
+                    </li>
+                    -->
+                    <% if(user) { %>
+
+                    <li>
+                        <a href="/profile">Profile</a>
+                    </li>
+
+                    <li class="current">
+                        <a href="/viewdata">Data</a>
+                    </li>
+                    <% } %>
+                    <% if(user && userIsPatient) { %>
+                    <li >
+                        <a href="/doctors">Doctors</a>
+                    </li>
+                    <% } %>
+                    <% if (user && !userIsPatient) { %>
+                    <li >
+                        <a href="/patients">Patients</a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+
+        <div id="site_content">
+            <div id="sidebar_container"></div>
+
+            <div id="content">
+
+                <h1>View Data</h1>
+                <hr>
+
+                <br>
+                <p style="font-size:150%">Content coming soon...</p>
+
+                <!-- <canvas id="myChart"></canvas> -->
+
+                <br>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        // define variable using server-side data so that it can be accessed in graph_data.js
+        var queryData = JSON.parse('<%- data %>');
+    </script>
+
+    <!--
+    <script src="/public/static/bootstrap/js/Chart.min.js"></script>
+    <script type="text/javascript" src="/public/static/bootstrap/js/graph_data.js"></script>
+    -->
+</body>
+</html>

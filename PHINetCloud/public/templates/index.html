@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PHINet | Main</title>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'
+    type='text/css'>
+    <link href="public/static/bootstrap/css/style.css" rel="stylesheet" type=
+    "text/css">
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <div id="logo">
+                <a href="/"><h1>PHINet</h1></a>
+
+            </div>
+
+            <div class="loginArea">
+                <% if(user) { %><%= user %> | <a href="/logout">logout</a>
+                <% } else { %> <a href="/login">login</a> | <a href=
+                "/signup">signup</a> <% } %>
+            </div>
+
+            <br><br>
+
+            <div id="menubar">
+                <ul id="menu">
+
+                    <li class="current">
+                        <a href="/">Home</a>
+                    </li>
+
+                    <li>
+                        <a href="/faq">FAQ</a>
+                    </li>
+
+                   <!-- <li>
+                        <a href="/test">Test</a>
+                    </li>
+                    -->
+                    <% if(user) { %>
+
+                    <li>
+                        <a href="/profile">Profile</a>
+                    </li>
+
+                    <li>
+                        <a href="/viewdata">Data</a>
+                    </li>
+                    <% } %>
+                   <% if(user && userIsPatient) { %>
+                    <li >
+                        <a href="/doctors">Doctors</a>
+                    </li>
+                    <% } %>
+                    <% if (user && !userIsPatient) { %>
+                    <li >
+                        <a href="/patients">Patients</a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+
+        <div id="site_content">
+            <div id="content">
+
+                <h1>Welcome to PHINet!</h1>
+                <hr>
+                <br>
+
+                <p style="font-size: 150%"> Executive Summary</p>
+
+                <p style="font-size: 120%">
+                    PHINet is a testbed for Health-IoT over the Content Centric Network (CCN) known as Named Data Networking
+                    (NDN). Its creation was primarily motivated by the gap in what was possible and what was desired
+                    in terms of studying the implications Health-IoT over a CCN.
+
+                </p>
+
+                <br>
+                <hr>
+
+                <br>
+                <p style="font-size: 150%"> Fast Facts</p>
+
+                <ul style="font-size:120%">
+
+                    <li>PHINet is
+                        <a class="large_red" href="http://github.com/seales/PHINet">open source</a>.</li>
+
+                    <li>Our client application is
+                        <a class="large_red"href="https://play.google.com/store/apps/details?id=com.ndnhealthnet.androidudpclient">
+                            available for your android device</a></li>
+
+                    <li>Our work was featured in the <a class="large_red" href="http://www.themobileservices.org/2015/">
+                        2015 IEEE Mobile Services Conference</a>.</li>
+
+
+                </ul>
+
+                <br>
+                <hr>
+                <br>
+
+                <p style="font-size: 150%"> In Depth View</p>
+
+
+                <p style="font-size: 120%">
+                    Below is the project architecture. PHINet, an application-layer, Health-IoT, NDN testbed, runs
+                    over the current IP-Based Internet. We integrate an IoT of biometric sensors per client (controlled
+                    via Android device), a cloud server for data analytics, and doctors to observe the trends in their
+                    patients' health - all over a simulated Named Data Network. Thus we provide a measure of proof
+                    for both the viability of NDN and the viability of Health IoT over NDN; all of which comes in an
+                    open source testbed for further modification and study.
+                </p>
+
+                <br>
+                <div style="display:inline-block;">
+                    <img src="/public/images/architecture.jpg"style="width:80%; height:80%;margin-left:8% "  alt="architecture" >
+
+
+                </div>
+
+                <p style="font-size: 120%">
+                    Moreover, below  is the testbed topology. It shows the, potential, connections between clients, their associated
+                    biometric sensors, and the cloud server.
+                </p>
+
+                <div >
+                    <img src="/public/images/topology.jpg" style="width:60%; height:60%;margin-left:18%;" align="middle" alt="architecture" >
+                </div>
+
+                <br>
+                <br>
+                <hr>
+                <br>
+
+                <p style="font-size: 150%"> Background Reading</p>
+                <p style="font-size: 120%">You may find reading about NDN (the networking paradigm we simulate) useful.
+                    Here is a good place to start: <a class="large_red" href="http://named-data.net/">http://named-data.net/</a>. </p>
+
+                <br>
+                <hr>
+                <br>
+                <p style="font-size: 150%"> Abstract</p>
+
+                <p style="font-size: 120%">Named Data Networking, a future networking paradigm, allows
+                for features such as the naming of content for identification
+                and routing as well as router-based caching for ubiquitous
+                storage. These features are well suited for an Internet of
+                Things (IoT) which can network identifiable and addressable
+                electronic devices such as sensors that, in an IoT, are often
+                configured in a Wireless Body Area Network. To bridge the gap
+                between research approaches in the area of both Health-IoT and
+                content centric networking, this paper presents the first
+                content centric networking testbed framework called PHINet for
+                experimentation with Health-IoT. PHINet aims to fulfill the
+                following goals: ease of use, seamless scaling, support for
+                testing, development and integration of health services and
+                sensors, support for experimentation with live traffic
+                underneath, and integration of the cloud into Health- IoT.
+                Architecture, design, and implementation of PHINet is
+                presented. Furthermore, through several use cases, we
+                demonstrate the applicability of the proposed work.</p>
+                <br>
+            </div>
+        </div>
+        <br>
+    </div>
+</body>
+</html>

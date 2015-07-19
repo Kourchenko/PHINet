@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:textStyle="bold"
+        android:id="@+id/loggedInTextView"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:textStyle="bold"
+        android:id="@+id/entityNameView"
+        android:layout_margin="5dp" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:id="@+id/statusLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/dataStatus"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:id="@+id/dataStatusTextView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text=""
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:id="@+id/currentDataStatusTextView" />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:id="@+id/analyticsLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/analyticsStatus"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:id="@+id/analyticsStatusTextView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="none requested"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:id="@+id/analyticsResultTextView" />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/intervalSelectionBtn"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:text="@string/selectInterval"
+            android:background="@drawable/black_button"
+            style="@style/button_text"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/sensorSelectorSpinner" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:id="@+id/analyticsProgressBar"/>
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="145dp"
+        android:background="@color/white"
+        android:id="@+id/graph"
+        android:layout_margin="10dp"
+        android:layout_weight="0.89" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/analyticsBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@string/analyticsBtn"
+            android:background="@drawable/black_button"
+            style="@style/button_text"
+            android:layout_gravity="center|bottom"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/userDataBackBtn"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="@string/backBtn"
+            android:background="@drawable/black_button"
+            style="@style/button_text"
+            android:layout_gravity="center|bottom"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+</LinearLayout>

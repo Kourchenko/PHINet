@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ΦNet</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="signup">Signup</string>
+    <string name="sensors">Sensors</string>
+    <string name="sensorSettings">Sensor Settings</string>
+    <string name="myData">My Data</string>
+    <string name="patients">Patients</string>
+    <string name="doctors">Doctors</string>
+    <string name="patientData">Patient Data</string>
+    <string name="packets">Packets</string>
+    <string name="connectSensors">Connect to a Sensor</string>
+
+    <string name="userName">User Name: </string>
+    <string name="password">Password: </string>
+    <string name="verifyPassword">Verify Password: </string>
+    <string name="email">Email (optional): </string>
+    <string name="sensorName">Sensor Name: </string>
+    <string name="collectionInterval">Collect Interval (hours): </string>
+    <string name="connectionStatus">Connection Status: </string>
+    <string name="analyticsStatus">Analytics: </string>
+    <string name="userType">User Type: </string>
+
+    <string name="doctor">Doctor</string>
+    <string name="patient">Patient</string>
+
+    <string name="dataStatus">Data Status: </string>
+    <string name="ip">IP: </string>
+
+    <string name="heartBeatDefault">--</string>
+
+    <string name="save">Save</string>
+    <string name="backBtn">Back</string>
+    <string name="clearDB">Clear Database</string>
+    <string name="requestData">Request Data</string>
+    <string name="saveChanges">Save Changes</string>
+    <string name="deletePatient">Delete Patient</string>
+    <string name="addNewPatient">Add New Patient</string>
+    <string name="addNewDoctor">Add New Doctor</string>
+    <string name="addNewSensor">Add New Sensor</string>
+    <string name="record">Record</string>
+    <string name="sensorConnect">Connect Sensor</string>
+    <string name="deleteSensor">Delete Sensor</string>
+    <string name="viewPackets">View Packets</string>
+    <string name="selectInterval">Select Interval</string>
+    <string name="viewData">View Data</string>
+    <string name="discoverSensors">Discover Sensors</string>
+    <string name="analyticsBtn">Analytics</string>
+
+    <string name="initialText">You must login/signup before accessing other features.</string>
+
+    <string name="patientNotifier">For patients: </string>
+    <string name="doctorNotifier">For doctors: </string>
+    <string name="noPatientNotifier">You have no patients.\nOne must add you first.</string>
+    <string name="noDoctorNotifier">You have no doctors.\nAdd one now.</string>
+    <string name="noPacketNotifier">You haven\'t exchanged\nany packets yet.</string>
+</resources>
