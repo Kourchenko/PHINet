@@ -8,6 +8,13 @@
   "dependencies": {
     "aws-sdk": "*",
     "express": "^4.8.0",
-    "jade": "*"
+    "jade": "*",
+    "cookie-parser": "*",
+    "bcrypt": "*",
+    "pg": "*",
+    "gauss": "*",
+    "ejs": "*",
+    "serve-favicon": "*",
+    "body-parser": "*"
   }
 }
