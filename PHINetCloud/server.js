@@ -30,12 +30,20 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+// Filter for all the request to check wether isRateLimited
+app.all("*", function(req, res, next){
+    if (!isRateLimited(req)) {
+        next() ;
+    } else {
+        displayPageRateLimited(res);
+    };
+}) ;
+
 app.set('port',  process.env.PORT || 3000);
 app.use(express.static(__dirname));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 
-var RATE_LIMIT_CODE = 429; // HTTP Code 429 is for rate-limits
 var rateLimitDictionary = {};
 
 // chosen somewhat arbitrarily, is hopefully large enough to server many legitimate users with private IP
@@ -120,47 +128,44 @@ function displayPage(httpStatusCode, res, path, log, ejsParams) {
 }
 
 var displayPageRateLimited = function(res){
-    displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+    // HTTP Code 429 is for rate-limits
+    displayPage(429, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
 } ;
 
 /**
  * Handles main web page
  */
 app.get('/', function (req, res) {
-    if (!isRateLimited(req)) {
-        fs.readFile(__dirname + '/public/templates/index.html', 'utf-8', function(err, content) {
-            if (err) {
-                console.log("Error serving index.html: " + err);
-            } else {
+    fs.readFile(__dirname + '/public/templates/index.html', 'utf-8', function(err, content) {
+        if (err) {
+            console.log("Error serving index.html: " + err);
+        } else {
 
-    
-            }
-            if (req.cookies.user) {
-                LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-                    var ejsParams;
+        }
+        if (req.cookies.user) {
+            LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-                    if (queryResult) {
-                        var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
+                var ejsParams;
 
-                        ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
-                    }
-                    else {
-                        ejsParams = {user: "", userIsPatient: ""};
-                    }
+                if (queryResult) {
+                    var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
 
-                    displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-                });
-            } else {
-
-                var ejsParams = {user: "", userIsPatient: ""};
+                    ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
+                }
+                else {
+                    ejsParams = {user: "", userIsPatient: ""};
+                }
 
                 displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-            }
-        });
-    } else {
-        displayPageRateLimited(res);
-    }
+            });
+        } else {
+
+            var ejsParams = {user: "", userIsPatient: ""};
+
+            displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
+        }
+    });
 });
 
 /**
@@ -178,56 +183,41 @@ app.get('/login', function (req, res) {
  * Handles signup page
  */
 app.get('/signup', function (req, res) {
-    if (!isRateLimited(req)) {
-        displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ", {error:""});
-    } else {
-        displayPageRateLimited(res);
-    }
+    displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ", {error:""});
 });
 
 /**
  * Handles logout request by clearing the login cookie.
  */
 app.get('/logout', function(req, res) {
-    if (!isRateLimited(req)) {
-
-        res.clearCookie('user'); // user has logged out; clear the login cookie
-        var ejsParams = {user: "", userIsPatient: "", error:""};
-    
-        displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-    } else {
-        displayPageRateLimited(res);
-    }
+    res.clearCookie('user'); // user has logged out; clear the login cookie
+    var ejsParams = {user: "", userIsPatient: "", error:""};
+    displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
 });
 
 /**
  * Handles FAQ page
  */
 app.get('/faq', function (req, res) {
-    if (!isRateLimited(req)) {
-            if (req.cookies.user) {
-                LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
+    if (req.cookies.user) {
+        LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-                    var renderedHtml;
-                    var ejsParams;
-                    if (queryResult) {
-                        var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
+            var renderedHtml;
+            var ejsParams;
+            if (queryResult) {
+                var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
 
-                        ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
-                    }
-                    else {
-                        ejsParams = {user: "", userIsPatient: ""};
-                    }
-
-                    displayPage(200, res, '/public/templates/faq.html', "Error serving faq.html: ", ejsParams);
-                });
-            } else {
-                var ejsParams = {user: "", userIsPatient: ""};
-                displayPage(200, res, '/public/templates/faq.html', "Error serving faq.html: ", ejsParams);
+                ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
             }
-       
+            else {
+                ejsParams = {user: "", userIsPatient: ""};
+            }
+
+            displayPage(200, res, '/public/templates/faq.html', "Error serving faq.html: ", ejsParams);
+        });
     } else {
-        displayPageRateLimited(res);
+        var ejsParams = {user: "", userIsPatient: ""};
+        displayPage(200, res, '/public/templates/faq.html', "Error serving faq.html: ", ejsParams);
     }
 });
 
@@ -235,96 +225,85 @@ app.get('/faq', function (req, res) {
  * Handles profile page
  */
 app.get('/profile', function (req, res) {
-    
-    if (!isRateLimited(req)) {
-    
-        // verify that user-login cookie exists before displaying profile page
-        if (req.cookies && req.cookies.user) {
+    // verify that user-login cookie exists before displaying profile page
+    if (req.cookies && req.cookies.user) {
 
-            // now, query database as second level of validation
-            LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
+        // now, query database as second level of validation
+        LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-                var ejsParams;
+            var ejsParams;
 
-                if (queryResult) {
-                    var displayedEmail;
-                    if (queryResult.getEmail() === StringConst.NULL_FIELD) {
-                        displayedEmail = "none on record"
-                    } else {
-                        displayedEmail = queryResult.getEmail();
-                    }
-
-                    var userType;
-                    var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
-                    if (queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE) {
-                        userType = "Patient";
-                    } else {
-                        userType = "Doctor";
-                    }
-
-                    ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient,
-                        email: displayedEmail, type: userType};
-
-                    displayPage(200, res, '/public/templates/profile.html', "Error serving profile.html: ", ejsParams); 
+            if (queryResult) {
+                var displayedEmail;
+                if (queryResult.getEmail() === StringConst.NULL_FIELD) {
+                    displayedEmail = "none on record"
                 } else {
-                    ejsParams = {user: "", userIsPatient:""};
-                    displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
+                    displayedEmail = queryResult.getEmail();
                 }
-            });
 
-        }
-        // user doesn't exist, direct to main page
-        else {
+                var userType;
+                var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
+                if (queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE) {
+                    userType = "Patient";
+                } else {
+                    userType = "Doctor";
+                }
 
-            ejsParams = {user: "", userIsPatient:""};
-            displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-        }     
-    } else {
-        displayPageRateLimited(res);
+                ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient,
+                    email: displayedEmail, type: userType};
+
+                displayPage(200, res, '/public/templates/profile.html', "Error serving profile.html: ", ejsParams); 
+            } else {
+                ejsParams = {user: "", userIsPatient:""};
+                displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
+            }
+        });
+
     }
+    // user doesn't exist, direct to main page
+    else {
+
+        ejsParams = {user: "", userIsPatient:""};
+        displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
+    }     
 });
 
 /**
  * Handles viewdata page
  */
 app.get('/viewdata', function (req, res) {
-    if (!isRateLimited(req)) {
-    
-        // verify that user exists before displaying page
-        if (req.cookies && req.cookies.user) {
+    // verify that user exists before displaying page
+    if (req.cookies && req.cookies.user) {
 
-            // query the database for the user's data
-            CS.getGeneralCSData(req.cookies.user, function(rowsTouched, queryResults) {
+        // query the database for the user's data
+        CS.getGeneralCSData(req.cookies.user, function(rowsTouched, queryResults) {
 
 
-                LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
+            LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-                    var ejsParams;
+                var ejsParams;
 
-                    if (queryResult) {
-                        var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
+                if (queryResult) {
+                    var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
 
-                        ejsParams ={user: req.cookies.user, userIsPatient: userIsPatient,
-                                                                        data:JSON.stringify(queryResults)};
-                    }
-                    else {
-                        ejsParams = {user: "", userIsPatient: "", data:""};
-                    }
+                    ejsParams ={user: req.cookies.user, userIsPatient: userIsPatient,
+                                                                    data:JSON.stringify(queryResults)};
+                }
+                else {
+                    ejsParams = {user: "", userIsPatient: "", data:""};
+                }
 
-                    displayPage(200, res, '/public/templates/viewdata.html', "Error serving viewdata.html: ", ejsParams);
-                });
-                // TODO - improve upon display (give patients or own data, etc)
+                displayPage(200, res, '/public/templates/viewdata.html', "Error serving viewdata.html: ", ejsParams);
             });
+            // TODO - improve upon display (give patients or own data, etc)
+        });
 
-        }
-        // user doesn't exist, direct to main page
-        else {
+    }
+    // user doesn't exist, direct to main page
+    else {
 
-            ejsParams = {user: "", userIsPatient:""};
-            displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-        }
-    } else {
-        displayRateLimitPage(res)
+        ejsParams = {user: "", userIsPatient:""};
+        displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
     }
 });
 
@@ -369,43 +348,37 @@ app.get('/test', function (req, res) {
  * Handles doctors page
  */
 app.get('/doctors', function (req, res) {
-    if (!isRateLimited(req)) {
-    
-       
-        if (req.cookies.user) {
-            LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
+    if (req.cookies.user) {
+        LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-                var renderedHtml;
+            var renderedHtml;
 
-                if (queryResult) {
-                    var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
+            if (queryResult) {
+                var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
 
-                    if (userIsPatient) {
+                if (userIsPatient) {
 
-                        LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResult) {
-                            
-                            var ejsParams = {user: req.cookies.user, userIsPatient: true, doctors: queryResult, error: ""};
-                            displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
-                        });
-                    } else {
-                        // only patients can view Doctors.html; redirect to main
-                        var ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
-                        displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-                    }
-
-                }
-                else {
-                    // no user found in DB; display index page
-                    var ejsParams = {user: "", userIsPatient: ""};
+                    LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResult) {
+                        
+                        var ejsParams = {user: req.cookies.user, userIsPatient: true, doctors: queryResult, error: ""};
+                        displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
+                    });
+                } else {
+                    // only patients can view Doctors.html; redirect to main
+                    var ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
                     displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
                 }
-            });
-        } else {
-            var ejsParams = {user: "", userIsPatient: ""};
-            displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-        }
+
+            }
+            else {
+                // no user found in DB; display index page
+                var ejsParams = {user: "", userIsPatient: ""};
+                displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
+            }
+        });
     } else {
-        displayPageRateLimited(res);
+        var ejsParams = {user: "", userIsPatient: ""};
+        displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
     }
 });
 
@@ -413,45 +386,39 @@ app.get('/doctors', function (req, res) {
  * Handles patients page
  */
 app.get('/patients', function (req, res) {
+    if (req.cookies.user) {
+        LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-    if (!isRateLimited(req)) {
-    
-        if (req.cookies.user) {
-            LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
+            var renderedHtml;
 
-                var renderedHtml;
+            if (queryResult) {
+                var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
 
-                if (queryResult) {
-                    var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
+                if (!userIsPatient) {
 
-                    if (!userIsPatient) {
+                    LoginDB.getPatients(req.cookies.user, function(rowCount, queryResult) {
+                        var ejsParams = {
+                                        user: req.cookies.user,
+                                        userIsPatient: false,
+                                        patients: queryResult
+                                    };
 
-                        LoginDB.getPatients(req.cookies.user, function(rowCount, queryResult) {
-                            var ejsParams = {
-                                            user: req.cookies.user,
-                                            userIsPatient: false,
-                                            patients: queryResult
-                                        };
-
-                            displayPage(200, res, '/public/templates/patients.html', "Error serving patients.html: ",ejsParams);
-                        });
-                    } else {
-                        // only doctors can view Patients.html; redirect to main
-                        var ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
-                        displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-                    }
+                        displayPage(200, res, '/public/templates/patients.html', "Error serving patients.html: ",ejsParams);
+                    });
+                } else {
+                    // only doctors can view Patients.html; redirect to main
+                    var ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
+                    displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
                 }
-                else {
-                    var ejsParams = {user: "", userIsPatient: ""};  // user doesn't exist
-                     displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-                }
-            });
-        } else {
-            var ejsParams = {user: "", userIsPatient: ""};  // user doesn't exist
-            displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
-        }
+            }
+            else {
+                var ejsParams = {user: "", userIsPatient: ""};  // user doesn't exist
+                 displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
+            }
+        });
     } else {
-        displayPageRateLimited(res);
+        var ejsParams = {user: "", userIsPatient: ""};  // user doesn't exist
+        displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
     }
 });
 
@@ -459,87 +426,77 @@ app.get('/patients', function (req, res) {
  * Handles all other queries; responds with 404 page
  */
 app.get('*', function(req, res) {
-    if (!isRateLimited(req)) {
-    
-        if (req.cookies.user) {
-            LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
+    if (req.cookies.user) {
+        LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-                var ejsParams;
+            var ejsParams;
 
-                if (queryResult) {
-                    var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
+            if (queryResult) {
+                var userIsPatient = queryResult.getEntityType() === StringConst.PATIENT_USER_TYPE;
 
-                    ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
-                }
-                else {
-                    ejsParams = {user: "", userIsPatient: ""};
-                }
+                ejsParams = {user: req.cookies.user, userIsPatient: userIsPatient};
+            }
+            else {
+                ejsParams = {user: "", userIsPatient: ""};
+            }
 
-                displayPage(404, res, '/public/templates/404.html', "Error serving 404.html: ",ejsParams);
-            });
-        } else {
-            var ejsParams = {user: "", userIsPatient: ""};
             displayPage(404, res, '/public/templates/404.html', "Error serving 404.html: ",ejsParams);
-        }
+        });
     } else {
-        displayPageRateLimited(res);
+        var ejsParams = {user: "", userIsPatient: ""};
+        displayPage(404, res, '/public/templates/404.html', "Error serving 404.html: ",ejsParams);
     }
 });
 
 /**
  * Handles user login-attempt
  */
-app.post('/loginAction', function(req, res) {
-    if (!isRateLimited(req)) {
-        
-        // check that user entered both required params
-        if (!req.body.user_name || !req.body.user_password) {
+app.post('/loginAction', function(req, res) { 
+    // check that user entered both required params
+    if (!req.body.user_name || !req.body.user_password) {
 
-            // notify user of unsuccessful login
-            var ejsParams = {error: "Login unsuccessful: provide all input.", user:""};
-            displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ",ejsParams);
+        // notify user of unsuccessful login
+        var ejsParams = {error: "Login unsuccessful: provide all input.", user:""};
+        displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ",ejsParams);
 
-        } else {
-
-            var pw = req.body.user_password.trim();
-            var userName = req.body.user_name.trim();
-
-            // user entered both required params, now query databse to verify password
-            LoginDB.getUserByID(userName, function(rowsTouched, queryResults){
-
-                // only attempt to compare passwords if query was successful
-                if (queryResults != null && rowsTouched == 1) {
-
-                    utils.comparePassword(pw, queryResults.getPassword(),
-                        function(err, isPasswordMatch) {
-
-                            if (isPasswordMatch) {
-                                // notify user of successful login
-                                
-                                // TODO - improve on cookie use
-                                var userIsPatient = queryResults.getEntityType() === StringConst.PATIENT_USER_TYPE;
-
-                                // store cookie for 1 day
-                                res.cookie('user', userName, {maxAge: 1000 * 60 * 60 * 24, httpOnly:true});
-
-                                var ejsParams = {user: userName, userIsPatient: userIsPatient};
-
-                                displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ",ejsParams);       
-                            } else {
-                                // notify user of unsuccessful login
-                                var ejsParams = {error: "Login unsuccessful: incorrect password.", user:""};
-                                displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ",ejsParams);
-                            }
-                    });
-                } else {
-                    // notify user of unsuccessful login (no user found)
-                    var ejsParams = {error: "Login unsuccessful: user does not exist.", user:""};
-                    displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ",ejsParams);
-                }
-            });
-        }
     } else {
-        displayPageRateLimited(res);
+
+        var pw = req.body.user_password.trim();
+        var userName = req.body.user_name.trim();
+
+        // user entered both required params, now query databse to verify password
+        LoginDB.getUserByID(userName, function(rowsTouched, queryResults){
+
+            // only attempt to compare passwords if query was successful
+            if (queryResults != null && rowsTouched == 1) {
+
+                utils.comparePassword(pw, queryResults.getPassword(),
+                    function(err, isPasswordMatch) {
+
+                        if (isPasswordMatch) {
+                            // notify user of successful login
+                            
+                            // TODO - improve on cookie use
+                            var userIsPatient = queryResults.getEntityType() === StringConst.PATIENT_USER_TYPE;
+
+                            // store cookie for 1 day
+                            res.cookie('user', userName, {maxAge: 1000 * 60 * 60 * 24, httpOnly:true});
+
+                            var ejsParams = {user: userName, userIsPatient: userIsPatient};
+
+                            displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ",ejsParams);       
+                        } else {
+                            // notify user of unsuccessful login
+                            var ejsParams = {error: "Login unsuccessful: incorrect password.", user:""};
+                            displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ",ejsParams);
+                        }
+                });
+            } else {
+                // notify user of unsuccessful login (no user found)
+                var ejsParams = {error: "Login unsuccessful: user does not exist.", user:""};
+                displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ",ejsParams);
+            }
+        });
     }
 });
 
@@ -547,100 +504,95 @@ app.post('/loginAction', function(req, res) {
  * Handles user register-attempt
  */
 app.post('/registerAction', function(req, res) {
-    if (!isRateLimited(req)) {
-    
-        //check that user entered all required params
-        if (!req.body.user_password || !req.body.user_name || !req.body.user_type) {
-            // notify user of unsuccessful login
-            var ejsParams = {error: "Register unsuccessful: provide all input.", user:""};
-            displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ",ejsParams);
-        } else {
+    //check that user entered all required params
+    if (!req.body.user_password || !req.body.user_name || !req.body.user_type) {
+        // notify user of unsuccessful login
+        var ejsParams = {error: "Register unsuccessful: provide all input.", user:""};
+        displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ",ejsParams);
+    } else {
 
-            var pw = req.body.user_password[1].trim();
-            var verifyPW = req.body.user_password[1].trim();
-            var userName = req.body.user_name.trim();
-            var email = req.body.user_email.trim();
-            
-            // check that passwords match, enforce PW/Username syntax, and verify validity of email address
-            if (pw === verifyPW
-                && utils.isValidPassword(pw) && utils.isValidUserName(userName)
-                && (!email || utils.isValidEmail(email))) {
+        var pw = req.body.user_password[1].trim();
+        var verifyPW = req.body.user_password[1].trim();
+        var userName = req.body.user_name.trim();
+        var email = req.body.user_email.trim();
+        
+        // check that passwords match, enforce PW/Username syntax, and verify validity of email address
+        if (pw === verifyPW
+            && utils.isValidPassword(pw) && utils.isValidUserName(userName)
+            && (!email || utils.isValidEmail(email))) {
 
-                var userType = "";
-                if (req.body.user_type === 'p') {
+            var userType = "";
+            if (req.body.user_type === 'p') {
 
-                    // user type of 'p' denotes patient
-                    userType = StringConst.PATIENT_USER_TYPE;
-                } else {
-
-                    // only valid type remaining is DOCTOR
-                    userType = StringConst.DOCTOR_USER_TYPE;
-                }
-
-                if (!email) {
-                    email = StringConst.NULL_FIELD; // email not provided; list as null
-                }
-
-                // hash user's password then insert user in database
-                utils.hashPassword(pw, function(err, hashedPW) {
-
-                    // store hashed pw into DB
-                    LoginDB.insertNewUser(userName, hashedPW, email, userType,
-
-                        function(rowsTouched) {
-
-                            // one row touched corresponds to successful insertion
-                            if (rowsTouched === 1) {
-
-                                // notify user of successful register
-                      
-                                // TODO - improve on cookie use
-
-                                // store cookie for 1 day
-                                res.cookie('user', userName, {maxAge: 1000 * 60 * 60 * 24, httpOnly:true});
-
-                                var userIsPatient = userType === StringConst.PATIENT_USER_TYPE;
-
-                                var ejsParams = {user: userName, userIsPatient: userIsPatient};
-                                          
-                                displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ",ejsParams);
-                            }
-                            // an error occurred while inserting user into the database
-                            else {
-
-                                // notify user of bad input
-                                var ejsParams = {user: "", error: "Register unsuccessful."
-                                                        + "\nEither username or email already exists."};
-                                displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ",ejsParams);
-                            }
-                        });
-                });
-
+                // user type of 'p' denotes patient
+                userType = StringConst.PATIENT_USER_TYPE;
             } else {
 
-                var ejsParams;
-
-               if (pw !== verifyPW) {
-
-                    // notify user of password mismatch
-                    ejsParams = {user: "", error: "Passwords don't match."};
-                }
-                // since email is optional, validity only applies if it was entered
-                else if (!utils.isValidEmail(email) && email) {
-
-                    ejsParams = {user: "", error: "Invalid email."};
-                } else if (!utils.isValidPassword(pw)) {
-
-                    ejsParams = {user: "", error: "Invalid password. Must use 3-15 alpha-numerics."};
-                } else if (!utils.isValidUserName(userName)) {
-
-                    ejsParams = {user: "", error: "Invalid username. Must use 3-15 alpha-numerics."};
-                }
-                displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ",ejsParams);
+                // only valid type remaining is DOCTOR
+                userType = StringConst.DOCTOR_USER_TYPE;
             }
+
+            if (!email) {
+                email = StringConst.NULL_FIELD; // email not provided; list as null
+            }
+
+            // hash user's password then insert user in database
+            utils.hashPassword(pw, function(err, hashedPW) {
+
+                // store hashed pw into DB
+                LoginDB.insertNewUser(userName, hashedPW, email, userType,
+
+                    function(rowsTouched) {
+
+                        // one row touched corresponds to successful insertion
+                        if (rowsTouched === 1) {
+
+                            // notify user of successful register
+                  
+                            // TODO - improve on cookie use
+
+                            // store cookie for 1 day
+                            res.cookie('user', userName, {maxAge: 1000 * 60 * 60 * 24, httpOnly:true});
+
+                            var userIsPatient = userType === StringConst.PATIENT_USER_TYPE;
+
+                            var ejsParams = {user: userName, userIsPatient: userIsPatient};
+                                      
+                            displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ",ejsParams);
+                        }
+                        // an error occurred while inserting user into the database
+                        else {
+
+                            // notify user of bad input
+                            var ejsParams = {user: "", error: "Register unsuccessful."
+                                                    + "\nEither username or email already exists."};
+                            displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ",ejsParams);
+                        }
+                    });
+            });
+
+        } else {
+
+            var ejsParams;
+
+           if (pw !== verifyPW) {
+
+                // notify user of password mismatch
+                ejsParams = {user: "", error: "Passwords don't match."};
+            }
+            // since email is optional, validity only applies if it was entered
+            else if (!utils.isValidEmail(email) && email) {
+
+                ejsParams = {user: "", error: "Invalid email."};
+            } else if (!utils.isValidPassword(pw)) {
+
+                ejsParams = {user: "", error: "Invalid password. Must use 3-15 alpha-numerics."};
+            } else if (!utils.isValidUserName(userName)) {
+
+                ejsParams = {user: "", error: "Invalid username. Must use 3-15 alpha-numerics."};
+            }
+            displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ",ejsParams);
         }
-    } else {
-        displayPageRateLimited(res);
     }
 });
 
@@ -648,89 +600,83 @@ app.post('/registerAction', function(req, res) {
  * Handles user register-attempt
  */
 app.post('/addDoctor', function(req, res) {
-    if (!isRateLimited(req)) {
+    var doctorName = req.body.doctor_name.trim();
+    //check that user entered all required params
+    if (!doctorName) {
+        // notify user of unsuccessful login
+        
+        LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResult) {
+            var ejsParams = {
+                            user: req.cookies.user,
+                            userIsPatient: true,
+                            doctors: queryResult,
+                            error: "You must enter the doctor's name first."
+                        };
 
-        var doctorName = req.body.doctor_name.trim();
+            displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
+        });
+    } else if (utils.isValidUserName(doctorName)) {
+     
+            LoginDB.getUserByID(doctorName, function(rowCount, queryResult) {
 
-        //check that user entered all required params
-        if (!doctorName) {
-            // notify user of unsuccessful login
-            
-            LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResult) {
-                var ejsParams = {
-                                user: req.cookies.user,
-                                userIsPatient: true,
-                                doctors: queryResult,
-                                error: "You must enter the doctor's name first."
-                            };
+                if (rowCount === 1 && queryResult && queryResult.getEntityType() === StringConst.DOCTOR_USER_TYPE) {
 
-                displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
-            });
-        } else if (utils.isValidUserName(doctorName)) {
-         
-                LoginDB.getUserByID(doctorName, function(rowCount, queryResult) {
-
-                    if (rowCount === 1 && queryResult && queryResult.getEntityType() === StringConst.DOCTOR_USER_TYPE) {
-
-                        LoginDB.addDoctor(req.cookies.user, doctorName, function(rowsTouched) {
-
-                            LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResultGetDr) {
-
-                                var ejsParams = {
-                                    user: req.cookies.user,
-                                    userIsPatient: true,
-                                    doctors: queryResultGetDr,
-                                    error: ""
-                                };
-
-                                displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
-                            });
-
-                        });
-
-                    } else if (rowCount === 1 && queryResult) {
+                    LoginDB.addDoctor(req.cookies.user, doctorName, function(rowsTouched) {
 
                         LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResultGetDr) {
-                             var ejsParams = {
+
+                            var ejsParams = {
                                 user: req.cookies.user,
                                 userIsPatient: true,
                                 doctors: queryResultGetDr,
-                                error: "User exists but is not a doctor."
+                                error: ""
                             };
-                        displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);   
-                       
-                       });
 
-                    } else {
-              
-                        LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResultGetDr) {
-                            var ejsParams =  {
+                            displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
+                        });
+
+                    });
+
+                } else if (rowCount === 1 && queryResult) {
+
+                    LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResultGetDr) {
+                         var ejsParams = {
                             user: req.cookies.user,
                             userIsPatient: true,
                             doctors: queryResultGetDr,
-                            error: "User doesn't exist."
+                            error: "User exists but is not a doctor."
                         };
+                    displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);   
+                   
+                   });
 
-                        displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
-                        });
-                    }
-                });
+                } else {
+          
+                    LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResultGetDr) {
+                        var ejsParams =  {
+                        user: req.cookies.user,
+                        userIsPatient: true,
+                        doctors: queryResultGetDr,
+                        error: "User doesn't exist."
+                    };
 
-        } else {
-            LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResult) {
-                var ejsParams = {
-                    user: req.cookies.user,
-                    userIsPatient: true,
-                    doctors: queryResult,
-                    error: "Input wasn't syntactically valid."
-                };
-
-                displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
+                    displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
+                    });
+                }
             });
-        }       
+
     } else {
-        displayPageRateLimited(res);
-    }
+        LoginDB.getDoctors(req.cookies.user, function(rowCount, queryResult) {
+            var ejsParams = {
+                user: req.cookies.user,
+                userIsPatient: true,
+                doctors: queryResult,
+                error: "Input wasn't syntactically valid."
+            };
+
+            displayPage(200, res, '/public/templates/doctors.html', "Error serving doctors.html: ",ejsParams);
+        });
+    }       
 });
 
 // ---- Code Tests UDP Functionality ---
