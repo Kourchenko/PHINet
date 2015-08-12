@@ -110,7 +110,6 @@ setInterval(
  * @param ejsParams used to populate page
  */
 function displayPage(httpStatusCode, res, path, log, ejsParams) {
-
     fs.readFile(__dirname + path, 'utf-8', function(err, content) {
         if (err) {
             console.log(log + err);
@@ -121,13 +120,14 @@ function displayPage(httpStatusCode, res, path, log, ejsParams) {
     });
 }
 
-
+var displayPageRateLimited = function(res){
+    displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+} ;
 
 /**
  * Handles main web page
  */
 app.get('/', function (req, res) {
-
     if (!isRateLimited(req)) {
         fs.readFile(__dirname + '/public/templates/index.html', 'utf-8', function(err, content) {
             if (err) {
@@ -136,7 +136,6 @@ app.get('/', function (req, res) {
 
     
             }
-
             if (req.cookies.user) {
                 LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
@@ -161,7 +160,7 @@ app.get('/', function (req, res) {
             }
         });
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -172,7 +171,7 @@ app.get('/login', function (req, res) {
     if (!isRateLimited(req)) {
         displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ", {error:""});
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -183,7 +182,7 @@ app.get('/signup', function (req, res) {
     if (!isRateLimited(req)) {
         displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ", {error:""});
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -198,7 +197,7 @@ app.get('/logout', function(req, res) {
     
         displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -229,7 +228,7 @@ app.get('/faq', function (req, res) {
             }
        
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -282,7 +281,7 @@ app.get('/profile', function (req, res) {
             displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
         }     
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -363,7 +362,7 @@ app.get('/test', function (req, res) {
         }
    
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });*/
 
@@ -407,7 +406,7 @@ app.get('/doctors', function (req, res) {
             displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
         }
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -453,7 +452,7 @@ app.get('/patients', function (req, res) {
             displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", ejsParams);
         }
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -484,7 +483,7 @@ app.get('*', function(req, res) {
             displayPage(404, res, '/public/templates/404.html', "Error serving 404.html: ",ejsParams);
         }
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -541,7 +540,7 @@ app.post('/loginAction', function(req, res) {
             });
         }
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -642,7 +641,7 @@ app.post('/registerAction', function(req, res) {
             }
         }
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
@@ -731,7 +730,7 @@ app.post('/addDoctor', function(req, res) {
             });
         }       
     } else {
-        displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+        displayPageRateLimited(res);
     }
 });
 
