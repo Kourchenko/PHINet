@@ -44,7 +44,7 @@ var CLEAN_RATE_DICT_INTERVAL = 1000 * 60 * 60; // chosen somewhat arbitrarily
 
 var getIp = function(req){
     return req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
+        req.socket.remoteAddress || req.connection.socket.remoteAddress;
 };
 
 var isRateLimited = function(req){
@@ -62,12 +62,12 @@ var isRateLimitedByIp = function (userIP) {
 
     var currentSecond = parseInt(new Date().getTime() / 1000);
 
-    if (!rateLimitDictionary[userIP]) {
-        rateLimitDictionary[userIP] = [currentSecond, 1];
-        return false;
-    } else {
+        if (!rateLimitDictionary[userIP]) {
+            rateLimitDictionary[userIP] = [currentSecond, 1];
+            return false;
+        } else {
 
-        if (rateLimitDictionary[userIP][0] === currentSecond) {
+            if (rateLimitDictionary[userIP][0] === currentSecond) {
 
             if(rateLimitDictionary[userIP][1] > MAX_HITS_PER_SECOND) {
                 return true;
