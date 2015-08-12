@@ -30,19 +30,17 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-// Filter for all the request to check wether isRateLimited
-app.all("*", function(req, res, next){
-    if (!isRateLimited(req)) {
-        next() ;
-    } else {
-        displayPageRateLimited(res);
-    };
-}) ;
-
 app.set('port',  process.env.PORT || 3000);
 app.use(express.static(__dirname));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
+// Filter for all the request to check wether isRateLimited
+app.all("*", function(req, res, next){
+    if (!isRateLimited(req)) 
+        next() ;
+    else 
+        displayPageRateLimited(res);
+}) ;
 
 var rateLimitDictionary = {};
 
@@ -119,11 +117,10 @@ setInterval(
  */
 function displayPage(httpStatusCode, res, path, log, ejsParams) {
     fs.readFile(__dirname + path, 'utf-8', function(err, content) {
-        if (err) {
+        if (err) 
             console.log(log + err);
-        } else {
+        else 
           res.status(httpStatusCode).send(ejs.render(content, ejsParams));
-        }
     });
 }
 
