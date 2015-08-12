@@ -42,21 +42,28 @@ var rateLimitDictionary = {};
 var MAX_HITS_PER_SECOND = 50; 
 var CLEAN_RATE_DICT_INTERVAL = 1000 * 60 * 60; // chosen somewhat arbitrarily
 
-// TODO - improve upon this naive rate-limiting
+var getIp = function(req){
+    return req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
+                req.socket.remoteAddress || req.connection.socket.remoteAddress;
+};
 
+var isRateLimited = function(req){
+    return isRateLimitedByIp(getIp(req)) ;
+};
+
+// TODO - improve upon this naive rate-limiting
 /**
  * Enforces that each IP recieves a maximum of MAX_HITS_PER_SECOND pages each second.
  * 
  * @param userIP of user requesting page
  * @return boolean regarding isRateLimit status of user's IP
  */
-var isRateLimited = function (userIP) {
+var isRateLimitedByIp = function (userIP) {
 
     var currentSecond = parseInt(new Date().getTime() / 1000);
 
     if (!rateLimitDictionary[userIP]) {
         rateLimitDictionary[userIP] = [currentSecond, 1];
-
         return false;
     } else {
 
@@ -114,15 +121,14 @@ function displayPage(httpStatusCode, res, path, log, ejsParams) {
     });
 }
 
+
+
 /**
  * Handles main web page
  */
 app.get('/', function (req, res) {
 
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
         fs.readFile(__dirname + '/public/templates/index.html', 'utf-8', function(err, content) {
             if (err) {
                 console.log("Error serving index.html: " + err);
@@ -163,14 +169,8 @@ app.get('/', function (req, res) {
  * Handles login page
  */
 app.get('/login', function (req, res) {
-
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
-
+    if (!isRateLimited(req)) {
         displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ", {error:""});
-
     } else {
         displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
     }
@@ -180,14 +180,8 @@ app.get('/login', function (req, res) {
  * Handles signup page
  */
 app.get('/signup', function (req, res) {
-
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
-       
+    if (!isRateLimited(req)) {
         displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ", {error:""});
-
     } else {
         displayPage(RATE_LIMIT_CODE, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
     }
@@ -197,11 +191,7 @@ app.get('/signup', function (req, res) {
  * Handles logout request by clearing the login cookie.
  */
 app.get('/logout', function(req, res) {
-
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
 
         res.clearCookie('user'); // user has logged out; clear the login cookie
         var ejsParams = {user: "", userIsPatient: "", error:""};
@@ -216,12 +206,7 @@ app.get('/logout', function(req, res) {
  * Handles FAQ page
  */
 app.get('/faq', function (req, res) {
-
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
-        
+    if (!isRateLimited(req)) {
             if (req.cookies.user) {
                 LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
@@ -252,11 +237,8 @@ app.get('/faq', function (req, res) {
  * Handles profile page
  */
 app.get('/profile', function (req, res) {
-
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    
+    if (!isRateLimited(req)) {
     
         // verify that user-login cookie exists before displaying profile page
         if (req.cookies && req.cookies.user) {
@@ -308,11 +290,7 @@ app.get('/profile', function (req, res) {
  * Handles viewdata page
  */
 app.get('/viewdata', function (req, res) {
-
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
     
         // verify that user exists before displaying page
         if (req.cookies && req.cookies.user) {
@@ -393,11 +371,7 @@ app.get('/test', function (req, res) {
  * Handles doctors page
  */
 app.get('/doctors', function (req, res) {
-
-     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
     
        
         if (req.cookies.user) {
@@ -442,10 +416,7 @@ app.get('/doctors', function (req, res) {
  */
 app.get('/patients', function (req, res) {
 
-     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
     
         if (req.cookies.user) {
             LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
@@ -490,11 +461,7 @@ app.get('/patients', function (req, res) {
  * Handles all other queries; responds with 404 page
  */
 app.get('*', function(req, res) {
-
-     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
     
         if (req.cookies.user) {
             LoginDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
@@ -525,11 +492,7 @@ app.get('*', function(req, res) {
  * Handles user login-attempt
  */
 app.post('/loginAction', function(req, res) {
-
-     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
         
         // check that user entered both required params
         if (!req.body.user_name || !req.body.user_password) {
@@ -586,11 +549,7 @@ app.post('/loginAction', function(req, res) {
  * Handles user register-attempt
  */
 app.post('/registerAction', function(req, res) {
-
-     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
     
         //check that user entered all required params
         if (!req.body.user_password || !req.body.user_name || !req.body.user_type) {
@@ -691,11 +650,7 @@ app.post('/registerAction', function(req, res) {
  * Handles user register-attempt
  */
 app.post('/addDoctor', function(req, res) {
-
-     var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
-
-    if (!isRateLimited(ip)) {
+    if (!isRateLimited(req)) {
 
         var doctorName = req.body.doctor_name.trim();
 
