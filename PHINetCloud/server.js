@@ -114,7 +114,6 @@ function displayPage(httpStatusCode, res, path, log, ejsParams) {
         if (err) {
             console.log(log + err);
         } else {
-
           res.status(httpStatusCode).send(ejs.render(content, ejsParams));
         }
     });
