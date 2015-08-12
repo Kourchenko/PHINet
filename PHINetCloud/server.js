@@ -114,13 +114,17 @@ function displayPage(httpStatusCode, res, path, log, ejsParams) {
     });
 }
 
+var getIp = function(req){
+    return req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
+                req.socket.remoteAddress || req.connection.socket.remoteAddress;
+} ;
+
 /**
  * Handles main web page
  */
 app.get('/', function (req, res) {
 
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 
-                req.socket.remoteAddress || req.connection.socket.remoteAddress;
+    var ip = getIp(req) ;
 
     if (!isRateLimited(ip)) {
         fs.readFile(__dirname + '/public/templates/index.html', 'utf-8', function(err, content) {
