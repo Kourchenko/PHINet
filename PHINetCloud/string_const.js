@@ -56,20 +56,10 @@ exports.StringConst = {
     CURRENT_TIME : "CURRENT_TIME",
 
     // allows node.js postgres module to connect to db
-    DB_CONNECTION_STRING: "pg://troy_admin:8n0o2z0a6@ndnhealthdb.cunk36nc1e3u.us-west-2.rds.amazonaws.com:5432/ndnhealth",
+    DB_CONNECTION_STRING: "TODO",
 
-    // db variables
-    CS_DB : "ContentStore",
-    CS_TEST_DB: "TestContentStore",
-
-    PIT_DB : "PendingInterestTable",
-    PIT_TEST_DB: "TestPendingInterestTable",
-
-    FIB_DB : "ForwardingInformationBase",
-    FIB_TEST_DB: "TestForwardingInformationBase",
-
-    LOGIN_DB: "LoginCredentials",
-    LOGIN_TEST_DB: "TestLoginCredentials",
+    CREDENTIAL_DB: "LoginCredentials",
+    CREDENTIAL_TEST_DB: "TestLoginCredentials",
 
     KEY_USER_ID : "_userID",
     KEY_SENSOR_ID : "sensorID",
@@ -82,64 +72,6 @@ exports.StringConst = {
     KEY_EMAIL: "email",
     KEY_PASSWORD: "password",
     KEY_ENTITY_TYPE: "entityType",  // this key represents doctor or patient status (DOCTOR or PATIENT, respectively)
-
-    // used to specify which analytic task to be completed; TODO - add more later
-    MODE_ANALYTIC : "MODE_ANALYTIC",
-    MEDIAN_ANALYTIC : "MEDIAN_ANALYTIC",
-    MEAN_ANALYTIC : "MEAN_ANALYTIC",
-
-    // denotes user type of patient (i.e. doctor or patient)
-    DOCTOR_USER_TYPE : "DOCTOR_USER_TYPE",
-    PATIENT_USER_TYPE : "PATIENT_USER_TYPE",
-
-    // used to query doctors from server
-    ADD_DOCTOR : "ADD_DOCTOR",
-    CLIENT_DOCTOR_SELECTION: "CLIENT_DOCTOR_SELECTION",
-    DOCTOR_LIST: "DOCTOR_LIST",
-
-    // used to query patients from server
-    ADD_PATIENT : "ADD_PATIENT",
-    CLIENT_PATIENT_SELECTION: "CLIENT_PATIENT_SELECTION",
-    PATIENT_LIST: "PATIENT_LIST",
-
-    /**
-     * Creates and returns string that generates table and test-table.
-     *
-     * @param dbName allows code resuse when creating (identical) table and test-table
-     * @returns {string} postgres query that creates table
-     */
-    createPITQuery : function (dbName) {
-      return "CREATE TABLE " + dbName + "("
-          +this.KEY_USER_ID + " TEXT ," + this.KEY_SENSOR_ID + " TEXT," +
-          this.KEY_TIME_STRING + " TEXT," +this.KEY_PROCESS_ID + " TEXT," +this.KEY_IP_ADDRESS + " TEXT,"
-          + "PRIMARY KEY(" + this.KEY_USER_ID + "," + this.KEY_TIME_STRING + ", "
-          + this.KEY_IP_ADDRESS+ "))";
-    },
-
-    /**
-     * Creates and returns string that generates table and test-table.
-     *
-     * @param dbName allows code resuse when creating (identical) table and test-table
-     * @returns {string} postgres query that creates table
-     */
-    createFIBQuery : function(dbName) {
-      return "CREATE TABLE " + dbName + "("
-          +this.KEY_USER_ID + " TEXT PRIMARY KEY," + this.KEY_TIME_STRING +
-          " TEXT, " +this.KEY_IP_ADDRESS + " TEXT)";
-    },
-
-    /**
-     * Creates and returns string that generates table and test-table.
-     *
-     * @param dbName allows code resuse when creating (identical) table and test-table
-     * @returns {string} postgres query that creates table
-     */
-    createCSQuery : function(dbName) {
-        return "CREATE TABLE " + dbName + "("
-        + this.KEY_USER_ID + " TEXT ," + this.KEY_SENSOR_ID + " TEXT," +
-        this.KEY_TIME_STRING + " TEXT ," + this.KEY_PROCESS_ID + " TEXT," +this.KEY_DATA_CONTENTS +
-        " TEXT, " + "PRIMARY KEY(" + this.KEY_USER_ID + ", " + this.KEY_TIME_STRING + "))";
-    },
 
     /**
      * Creates and returns string that generates table and test-table.

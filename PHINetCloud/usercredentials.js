@@ -1,5 +1,5 @@
 /**
- * File contains code for the LoginCredential database
+ * File contains code for the UserCredential database
  * that allows user-information manipulation and storage.
  */
 
@@ -8,14 +8,14 @@ var postgresDB = require('pg'); // postgres database module
 var client = new postgresDB.Client(StringConst.DB_CONNECTION_STRING);
 var UserClass = require('./user');
 
-var dbName = StringConst.LOGIN_DB;
+var dbName = StringConst.CREDENTIAL_DB;
 
 /**
- * Returns object that allows manipulation of LoginCredential database.
+ * Returns object that allows manipulation of UserCredential database.
  *
  * @param tableName specifies if table or test-table will be used (separate to avoid data corruption during testing)
  */
-exports.LoginCredentials = function (tableName) {
+exports.UserCredentials = function (tableName) {
 
     dbName = tableName; // set dbName (may be table or test-table name)
 
@@ -25,7 +25,7 @@ exports.LoginCredentials = function (tableName) {
     (function connectClient () {
         client.connect(function(err) {
             if(err) {
-                return console.error('could not connect to postgres', err);
+                console.error('could not connect to postgres', err);
             }
         });
     })();
@@ -88,7 +88,7 @@ exports.LoginCredentials = function (tableName) {
 
                 return true;
             } catch (err) {
-                console.log("!!Error in LoginCredentials.insertNewUser(): " + err);
+                console.log("!!Error in UserCredentials.insertNewUser(): " + err);
                 return false;
             }
         },
@@ -136,7 +136,7 @@ exports.LoginCredentials = function (tableName) {
                     return true;
                 }
             } catch (err) {
-                console.log("!!Error in LoginCredentials.getUserByID(): " + err);
+                console.log("!!Error in UserCredentials.getUserByID(): " + err);
                 return false;
             }
         },
@@ -186,7 +186,7 @@ exports.LoginCredentials = function (tableName) {
                     return true;
                 }
             } catch (err) {
-                console.log("!!Error in LoginCredentials.getUserByID(): " + err);
+                console.log("!!Error in UserCredentials.getUserByID(): " + err);
                 return false;
             }
         },
@@ -235,7 +235,7 @@ exports.LoginCredentials = function (tableName) {
                     return true;
                 }
             } catch (err) {
-                console.log("!!Error in LoginCredentials.updateUser(): " + err);
+                console.log("!!Error in UserCredentials.updateUser(): " + err);
                 return false;
             }
         },
@@ -281,7 +281,7 @@ exports.LoginCredentials = function (tableName) {
                     return true;
                 }
             } catch (err) {
-                console.log("!!Error in LoginCredentials.getDoctors(): " + err);
+                console.log("!!Error in UserCredentials.getDoctors(): " + err);
                 return false;
             }
         },
@@ -315,7 +315,7 @@ exports.LoginCredentials = function (tableName) {
                     return true;
                 }
             } catch (err) {
-                console.log("!!Error in LoginCredentials.getPatients(): " + err);
+                console.log("!!Error in UserCredentials.getPatients(): " + err);
                 return false;
             }
         },
@@ -368,7 +368,7 @@ exports.LoginCredentials = function (tableName) {
                 return true;
                 }   
             } catch (err) {
-                console.log("!!Error in LoginCredentials.addDoctor(): " + err);
+                console.log("!!Error in UserCredentials.addDoctor(): " + err);
                 return false;
             }
         },
@@ -416,7 +416,7 @@ exports.LoginCredentials = function (tableName) {
                     return true;       
                 }
             } catch (err) {
-                console.log("!!Error in LoginCredentials.addPatient(): " + err);
+                console.log("!!Error in UserCredentials.addPatient(): " + err);
                 return false;
             }
         },
@@ -450,7 +450,7 @@ exports.LoginCredentials = function (tableName) {
                     return true;
                 }
             } catch (err) {
-                console.log("!!Error in LoginCredentials.deleteUser(): " + err);
+                console.log("!!Error in UserCredentials.deleteUser(): " + err);
                 return false;
             }
         }
