@@ -31,7 +31,6 @@ app.set('port',  process.env.PORT || 3000);
 app.use(express.static(__dirname));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
-
 /**
  * Displays any webpage given input params
  *
@@ -50,8 +49,14 @@ function displayPage(httpStatusCode, res, path, log, embeddedJavaScriptParams) {
 
           res.status(httpStatusCode).send(embeddedJavaScript.render(content, embeddedJavaScriptParams));
         }
+
     });
 }
+
+var displayPageRateLimited = function(res){
+    // HTTP Code 429 is for rate-limits
+    displayPage(429, res, '/public/templates/rate_limit.html', "Error serving rate_limit.html: ", {});
+} ;
 
 /**
  * Handles main web page
@@ -69,6 +74,7 @@ app.get('/', function (req, res) {
 
         displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", {user: ""});
     }
+
 });
 
 /**
@@ -84,7 +90,6 @@ app.get('/login', function (req, res) {
  * Handles signup page
  */
 app.get('/signup', function (req, res) {
-
     displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ", {error:""});
 });
 
@@ -97,31 +102,31 @@ app.get('/logout', function(req, res) {
     var embeddedJavaScriptParams = {user: "", error:""};
 
     displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", embeddedJavaScriptParams);
+
 });
 
 /**
  * Handles FAQ page
  */
 app.get('/faq', function (req, res) {
+    if (req.cookies.user) {
+        UserCredentialDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
-        if (req.cookies.user) {
-            UserCredentialDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
+            var embeddedJavaScriptParams = queryResult ? req.cookies.user : "";
 
-                var embeddedJavaScriptParams = queryResult ? req.cookies.user : "";
-
-                displayPage(200, res, '/public/templates/faq.html', "Error serving faq.html: ", embeddedJavaScriptParams);
-            });
-        } else {
-            var embeddedJavaScriptParams = {user: ""};
             displayPage(200, res, '/public/templates/faq.html', "Error serving faq.html: ", embeddedJavaScriptParams);
-        }
+        });
+    } else {
+        var embeddedJavaScriptParams = {user: ""};
+        displayPage(200, res, '/public/templates/faq.html', "Error serving faq.html: ", embeddedJavaScriptParams);
+    }
+
 });
 
 /**
  * Handles profile page
  */
 app.get('/profile', function (req, res) {
-
     // verify that user-login cookie exists before displaying profile page
     if (req.cookies && req.cookies.user) {
 
@@ -130,10 +135,12 @@ app.get('/profile', function (req, res) {
 
             var embeddedJavaScriptParams;
 
+
             if (queryResult) {
                 var displayedEmail;
                 if (queryResult.getEmail() === StringConst.NULL_FIELD) {
                     displayedEmail = "none on record"
+
                 } else {
                     displayedEmail = queryResult.getEmail();
                 }
@@ -151,6 +158,7 @@ app.get('/profile', function (req, res) {
     // user doesn't exist, direct to main page
     else {
         displayPage(200, res, '/public/templates/index.html', "Error serving index.html: ", {user: ""});
+
     }
 });
 
@@ -158,7 +166,6 @@ app.get('/profile', function (req, res) {
  * Handles viewdata page
  */
 app.get('/viewdata', function (req, res) {
-
     // verify that user exists before displaying page
     if (req.cookies && req.cookies.user) {
 
@@ -176,7 +183,6 @@ app.get('/viewdata', function (req, res) {
  * Handles all other queries; responds with 404 page
  */
 app.get('*', function(req, res) {
-
     if (req.cookies.user) {
         UserCredentialDB.getUserByID(req.cookies.user, function(rowsTouched, queryResult) {
 
@@ -189,6 +195,7 @@ app.get('*', function(req, res) {
     } else {
         var embeddedJavaScriptParams = {user: ""};
         displayPage(404, res, '/public/templates/404.html', "Error serving 404.html: ",embeddedJavaScriptParams);
+
     }
 });
 
@@ -205,6 +212,7 @@ app.post('/loginAction', function(req, res) {
         // notify user of unsuccessful login
         embeddedJavaScriptParams = {error: "Login unsuccessful: provide all input.", user:""};
         displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ",embeddedJavaScriptParams);
+
 
     } else {
 
@@ -240,6 +248,7 @@ app.post('/loginAction', function(req, res) {
                 // notify user of unsuccessful login (no user found)
                 var embeddedJavaScriptParams = {error: "Login unsuccessful: user does not exist.", user:""};
                 displayPage(200, res, '/public/templates/login.html', "Error serving login.html: ",embeddedJavaScriptParams);
+
             }
         });
     }
@@ -278,14 +287,12 @@ app.post('/registerAction', function(req, res) {
 
                 // store hashed pw into DB
                 UserCredentialDB.insertNewUser(userName, hashedPW, email,
-
                     function(rowsTouched) {
 
                         // one row touched corresponds to successful insertion
                         if (rowsTouched === 1) {
 
                             // notify user of successful register
-
                             // TODO - improve on cookie use
 
                             // store cookie for 1 day
@@ -308,7 +315,7 @@ app.post('/registerAction', function(req, res) {
 
         } else {
 
-           if (pw !== verifyPW) {
+            if (pw !== verifyPW) {
 
                 // notify user of password mismatch
                 embeddedJavaScriptParams = {user: "", error: "Passwords don't match."};
@@ -324,12 +331,13 @@ app.post('/registerAction', function(req, res) {
 
                 embeddedJavaScriptParams = {user: "", error: "Invalid username. Must use 3-15 alpha-numerics."};
             }
-            displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ",embeddedJavaScriptParams);
+            displayPage(200, res, '/public/templates/signup.html', "Error serving signup.html: ", embeddedJavaScriptParams);
         }
     }
 });
 
 var postgresDB = require('pg');
+
 
 var client = new postgresDB.Client(StringConst.DB_CONNECTION_STRING);
 client.connect(function(err) {
