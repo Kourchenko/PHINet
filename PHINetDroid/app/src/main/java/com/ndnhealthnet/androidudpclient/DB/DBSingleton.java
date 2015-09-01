@@ -2,7 +2,6 @@ package com.ndnhealthnet.androidudpclient.DB;
 
 import android.content.Context;
 
-import com.ndnhealthnet.androidudpclient.DB.DBDataTypes.FIBEntry;
 import com.ndnhealthnet.androidudpclient.DB.DBDataTypes.SensorDBEntry;
 import com.ndnhealthnet.androidudpclient.Utility.ConstVar;
 
@@ -27,11 +26,6 @@ public class DBSingleton {
             // the heartbeat sensor should always be in the DB; any device will possess it
             datasource.addSensorData(new SensorDBEntry(ConstVar.HEARTBEAT_SENSOR, 1));
 
-            // add cloud-server to FIB
-            FIBEntry dbData = new FIBEntry(ConstVar.SERVER_ID, ConstVar.CURRENT_TIME,
-                    ConstVar.SERVER_IP, false);
-
-            datasource.addFIBData(dbData);
         }
         return instance;
     }

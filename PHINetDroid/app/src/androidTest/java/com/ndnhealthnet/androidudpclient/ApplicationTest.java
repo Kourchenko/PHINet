@@ -20,9 +20,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         Context context = getContext();
 
-        DatabaseHandlerTest dbHandlerTest = new DatabaseHandlerTest(context);
-        dbHandlerTest.runTests();
-
         UtilsTest utilsTest = new UtilsTest(context);
         utilsTest.runTests();
     }

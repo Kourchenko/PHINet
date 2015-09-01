@@ -16,8 +16,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ndnhealthnet.androidudpclient.DB.DBDataTypes.CSEntry;
-import com.ndnhealthnet.androidudpclient.DB.DBSingleton;
 import com.ndnhealthnet.androidudpclient.R;
 import com.ndnhealthnet.androidudpclient.Sensor.ImageProcessing;
 import com.ndnhealthnet.androidudpclient.Utility.ConstVar;
@@ -111,18 +109,6 @@ public class HeartbeatSensorActivity extends Activity {
 
                     String myUserID = Utils.getFromPrefs(getApplicationContext(),
                             ConstVar.PREFS_LOGIN_USER_ID_KEY, "");
-
-                    // store data in cache
-                    CSEntry data = new CSEntry();
-                    data.setUserID(myUserID);
-                    data.setSensorID(ConstVar.HEARTBEAT_SENSOR);
-                    data.setTimeString(ConstVar.CURRENT_TIME);
-                    data.setProcessID(ConstVar.DATA_CACHE); // no valid process id, set to null
-                    data.setDataPayload(Integer.toString(currentBeatInt));
-                    data.setFreshnessPeriod(ConstVar.DEFAULT_FRESHNESS_PERIOD);
-
-                    DBSingleton.getInstance(getApplicationContext()).getDB().addCSData(data);
-
 
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Heart beat successfully recorded.", Toast.LENGTH_SHORT);
@@ -275,7 +261,7 @@ public class HeartbeatSensorActivity extends Activity {
                 camera.setPreviewDisplay(previewHolder);
                 camera.setPreviewCallback(previewCallback);
             } catch (Throwable t) {
-                Log.e("PreviewDemo-surfaceCallback", "Exception in setPreviewDisplay()", t);
+              //  Log.e("PreviewDemo-surfaceCallback", "Exception in setPreviewDisplay()", t);
             }
         }
 

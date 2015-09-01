@@ -52,10 +52,6 @@ public class SensorListActivity extends ListActivity {
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = connManager.getActiveNetworkInfo();
 
-        // only attempt synch if connected to network
-        if (netInfo != null) {
-            MainActivity.requestSynch(getApplicationContext());
-        }
     }
 
     @Override

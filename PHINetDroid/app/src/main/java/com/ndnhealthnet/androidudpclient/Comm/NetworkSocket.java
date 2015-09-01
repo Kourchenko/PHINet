@@ -11,12 +11,12 @@ import java.util.TimerTask;
 /**
  * Class handles outbound UDP packets and listens when reply expected.
  */
-public class UDPSocket extends AsyncTask<byte[], Void, Void> {
+public class NetworkSocket extends AsyncTask<byte[], Void, Void> {
 
     String destAddr;
     int destPort;
 
-    public UDPSocket(int port, String addr){
+    public NetworkSocket(int port, String addr){
         destPort = port;
         destAddr = addr;
     }
@@ -55,7 +55,7 @@ public class UDPSocket extends AsyncTask<byte[], Void, Void> {
                         String packetSourceIP = receivePacket.getAddress().getHostAddress();
                         int packetPort = receivePacket.getPort();
 
-                        UDPListener.handleNDNPacket(receiveData, packetSourceIP, packetPort);
+                        NetworkListener.handlePacket(receiveData, packetSourceIP, packetPort);
 
                     } catch (Exception e) {
                         e.printStackTrace();
