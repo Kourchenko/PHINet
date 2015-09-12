@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+    android:id="@+id/titleBar"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="20dp"
+    android:text="@string/login"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textColor="#000000"
+    android:textStyle="bold"
+    android:textSize="30sp" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/userName"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:id="@+id/usernameTextView" />
+
+        <EditText
+            android:layout_width="190dp"
+            android:layout_height="match_parent"
+            android:id="@+id/usernameEditText"
+            android:gravity="end"
+            android:layout_marginLeft="28dp"
+            android:layout_marginStart="28dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/password"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:id="@+id/passwordTextView" />
+
+        <EditText
+            android:layout_width="190dp"
+            android:layout_height="match_parent"
+            android:id="@+id/passwordEditText"
+            android:gravity="end"
+            android:inputType="textPassword"
+            android:layout_marginLeft="38dp"
+            android:layout_marginStart="38dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:layout_margin="20dp">
+
+        <Button
+            android:id="@+id/loginSubmitBtn"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:background="@drawable/black_button"
+            style="@style/button_text"
+            android:layout_gravity="center|bottom"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/loginBackBtn"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="@string/backBtn"
+            android:background="@drawable/black_button"
+            style="@style/button_text"
+            android:layout_gravity="center|bottom"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:id="@+id/loginProgressBar"/>
+
+</LinearLayout>

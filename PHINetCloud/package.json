@@ -1,0 +1,20 @@
+{
+  "name": "TODO",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "aws-sdk": "*",
+    "express": "*",
+    "jade": "*",
+    "cookie-parser": "*",
+    "pg": "*",
+    "bcrypt": "*",
+    "gauss": "*",
+    "ejs": "*",
+    "serve-favicon": "*",
+    "body-parser": "*"
+  }
+}
