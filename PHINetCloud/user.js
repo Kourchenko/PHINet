@@ -1,4 +1,6 @@
 
+var StringConst = require('./string_const').StringConst;
+
 /**
  * Returns object that holds/manipulates User Data.
  */
@@ -6,7 +8,6 @@ exports.User = function () {
 
     return {
 
-        // --- member variables that may be manipulated ---
         userID: null,
         firstName: null,
         lastName: null,
@@ -18,11 +19,7 @@ exports.User = function () {
         dateOfBirth: null,
         lastLoginTime: null,
         lastLoginType: null,
-        // --- member variables that may be manipulated ---
 
-        /**
-         * constructor for user
-         */
         user: function (userID,
                         firstName,
                         lastName,
@@ -34,7 +31,6 @@ exports.User = function () {
                         dateOfBirth,
                         lastLoginTime,
                         lastLoginType) {
-
             this.userID = userID;
             this.firstName = firstName;
             this.lastName = lastName;
