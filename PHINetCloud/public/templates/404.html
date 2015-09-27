@@ -4,72 +4,37 @@
     <title>PHINet | 404</title>
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'
-    type='text/css'>
+          type='text/css'>
     <link href="public/static/bootstrap/css/style.css" rel="stylesheet" type=
-    "text/css">
+            "text/css">
 </head>
 
 <body>
-    <div id="main">
-        <div id="header">
-            <div id="logo">
-                <a href="/"><h1>PHINet</h1></a>
-            </div>
+<div id="main">
+    <div id="header">
+        <div id="logo">
+            <a href="/"><h1>PHINet</h1></a>
 
-            <div class="loginArea">
-                <% if(user) { %><%= user %> | <a href="/logout">logout</a>
-                <% } else { %> <a href="/login">login</a> | <a href=
-                "/signup">signup</a> <% } %>
-            </div>
-
-            <br><br>
-
-            <div id="menubar">
-                <ul id="menu">
-
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-
-                    <li>
-                        <a href="/faq">FAQ</a>
-                    </li>
-
-                    <!--<li>
-                        <a href="/test">Test</a>
-                    </li>--><% if(user) { %>
-
-                    <li >
-                        <a href="/profile">Profile</a>
-                    </li>
-
-                    <li>
-                        <a href="/viewdata">Data</a>
-                    </li>
-                    <% } %>
-                    <% if(user && userIsPatient) { %>
-                    <li >
-                        <a href="/doctors">Doctors</a>
-                    </li>
-                    <% } %>
-                    <% if (user && !userIsPatient) { %>
-                    <li >
-                        <a href="/patients">Patients</a>
-                    </li>
-                    <% } %>
-                </ul>
-            </div>
         </div>
 
-        <div id="site_content">
-            <div id="sidebar_container"></div>
+        <br><br>
 
-            <div id="content">
-                <br>
-                <h1>404: page not found!</h1>
-                <br>
-            </div>
+
+    </div>
+
+    <div id="site_content">
+        <div id="content">
+
+            <h1> Initial 404 Page</h1>
+
+            <p> Example content Example content Example content Example content
+                Example content Example content Example content Example content
+                Example content Example content Example content Example content
+                Example content Example content Example content Example content</p>
+
         </div>
     </div>
+    <br>
+</div>
 </body>
 </html>

@@ -8,46 +8,44 @@ exports.User = function () {
 
         // --- member variables that may be manipulated ---
         userID: null,
-        password: null,
+        firstName: null,
+        lastName: null,
         email: null,
+        password: null,
+        gender: null,
+        weightInPounds: null,
+        heightInInches: null,
+        dateOfBirth: null,
+        lastLoginTime: null,
+        lastLoginType: null,
         // --- member variables that may be manipulated ---
 
         /**
          * constructor for user
-         *
-         * @param userID associated with a given user
-         * @param password associated with a given user
-         * @param email associated with a given user
          */
-        user: function (userID, password, email) {
+        user: function (userID,
+                        firstName,
+                        lastName,
+                        email,
+                        password,
+                        gender,
+                        weightInPounds,
+                        heightInInches,
+                        dateOfBirth,
+                        lastLoginTime,
+                        lastLoginType) {
 
             this.userID = userID;
-            this.password = password;
+            this.firstName = firstName;
+            this.lastName = lastName;
             this.email = email;
-        },
-
-        getUserID : function() {
-            return this.userID;
-        },
-
-        setUserID : function(userID) {
-            this.userID = userID;
-        },
-
-        getPassword : function() {
-            return this.password;
-        },
-
-        setPassword : function(password) {
             this.password = password;
-        },
-
-        getEmail : function () {
-            return this.email;
-        },
-
-        setEmail: function(email) {
-            this.email = email;
+            this.gender = gender;
+            this.weightInPounds = weightInPounds;
+            this.heightInInches = heightInInches;
+            this.dateOfBirth = dateOfBirth;
+            this.lastLoginTime = lastLoginTime;
+            this.lastLoginType = lastLoginType;
         }
     }
 };

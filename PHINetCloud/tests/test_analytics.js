@@ -5,9 +5,6 @@
 var expect = require("chai").expect;
 var analytics = require('../analytics').analytics();
 
-/**
- * Tests UDPComm.handleFIBData() functionality.
- */
 describe('Analytics', function() {
     describe('#mean()', function () {
         it('method returns the mean value', function (done) {
@@ -45,9 +42,6 @@ describe('Analytics', function() {
     })
 });
 
-/**
- * Tests UDPComm.handleFIBData() functionality.
- */
 describe('Analytics', function() {
     describe('#mode()', function () {
         it('method returns the mode value', function (done) {
@@ -85,9 +79,6 @@ describe('Analytics', function() {
     })
 });
 
-/**
- * Tests UDPComm.handleFIBData() functionality.
- */
 describe('Analytics', function() {
     describe('#median()', function () {
         it('method returns the median value', function (done) {

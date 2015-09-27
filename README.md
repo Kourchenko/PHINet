@@ -1,2 +1,3 @@
 
-TODO - we need an appropriate internal readme
+PHINet - Personal Health Management at the palm of your hand.
+

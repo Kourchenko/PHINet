@@ -17,57 +17,20 @@
 
             </div>
 
-            <div class="loginArea">
-                <% if(user) { %><%= user %> | <a href="/logout">logout</a>
-                <% } else { %> <a href="/login">login</a> | <a href=
-                "/signup">signup</a> <% } %>
-            </div>
-
             <br><br>
 
-            <div id="menubar">
-                <ul id="menu">
 
-                    <li class="current">
-                        <a href="/">Home</a>
-                    </li>
-
-                    <li>
-                        <a href="/faq">FAQ</a>
-                    </li>
-
-                   <!-- <li>
-                        <a href="/test">Test</a>
-                    </li>
-                    -->
-                    <% if(user) { %>
-
-                    <li>
-                        <a href="/profile">Profile</a>
-                    </li>
-
-                    <li>
-                        <a href="/viewdata">Data</a>
-                    </li>
-                    <% } %>
-                   <% if(user && userIsPatient) { %>
-                    <li >
-                        <a href="/doctors">Doctors</a>
-                    </li>
-                    <% } %>
-                    <% if (user && !userIsPatient) { %>
-                    <li >
-                        <a href="/patients">Patients</a>
-                    </li>
-                    <% } %>
-                </ul>
-            </div>
         </div>
 
         <div id="site_content">
             <div id="content">
 
-                <h1> TODO - Define content</h1>
+                <h1> Initial Index Page</h1>
+
+                <p> Example content Example content Example content Example content
+                    Example content Example content Example content Example content
+                    Example content Example content Example content Example content
+                    Example content Example content Example content Example content</p>
 
             </div>
         </div>

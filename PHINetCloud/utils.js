@@ -3,7 +3,6 @@
  */
 
 var bcrypt = require('bcrypt');
-var StringConst = require('./string_const').StringConst;
 
 exports.Utils = {
 
