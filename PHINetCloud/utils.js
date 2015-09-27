@@ -12,13 +12,13 @@ exports.Utils = {
      * @param password input by user
      * @returns {boolean} determining validity of password
      */
-    isValidPassword: function(password) {
+    isValidPassword: function(password, callback) {
 
         if (password) {
             var regex = /^[a-zA-Z0-9_]{3,15}$/;
-            return regex.test(password);
+            callback(regex.test(password));
         } else {
-            return false;
+            callback(false);
         }
     },
 
@@ -28,15 +28,15 @@ exports.Utils = {
      * @param username input by user
      * @returns {boolean} determining validity of username
      */
-    isValidUserName: function(username) {
+    isValidUserName: function(username, callback) {
 
         // NOTE: keep username/password functions separate because syntax may change
 
         if (username) {
             var regex = /^[a-zA-Z0-9_]{3,15}$/;
-            return regex.test(username);
+            callback(regex.test(username));
         } else {
-            return false;
+            callback(false);
         }
     },
 
@@ -48,13 +48,13 @@ exports.Utils = {
      * @param email input by user
      * @returns {boolean} determining validity of email
      */
-    isValidEmail: function(email) {
+    isValidEmail: function(email, callback) {
 
         if (email) {
             var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-            return re.test(email);
+            callback(re.test(email));
         } else {
-            return false;
+            callback(false);
         }
     },
 
@@ -72,10 +72,10 @@ exports.Utils = {
 		} else {
             bcrypt.genSalt(10, function(err, salt) {
                 if (err)
-                    return callback(err, null);
+                    callback(err, null);
 
                 bcrypt.hash(password, salt, function(err, hash) {
-                    return callback(err, hash);
+                    callback(err, hash);
                 });
 
             })
@@ -96,8 +96,8 @@ exports.Utils = {
 		} else {
             bcrypt.compare(password, hashedPassword, function(err, isPasswordMatch) {
                 if (err)
-                    return callback(err, false);
-                return callback(null, isPasswordMatch);
+                    callback(err, false);
+                callback(null, isPasswordMatch);
             });
         }
 	}

@@ -25,7 +25,7 @@ exports.UserCredentials = function (tableName) {
     (function connectClient () {
         client.connect(function(err) {
             if(err) {
-                return console.error('could not connect to postgres', err);
+                console.error('could not connect to postgres', err);
             }
         });
     })();

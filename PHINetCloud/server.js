@@ -61,7 +61,7 @@ app.get('*', function(req, res) {
 var client = new postgresDB.Client(StringConst.DB_CONNECTION_STRING);
 client.connect(function(err) {
   if(err) {
-    return console.error('could not connect to postgres', err);
+      console.error('could not connect to postgres', err);
   }
 });
 
