@@ -7,6 +7,7 @@ var StringConst = require('./string_const').StringConst;
 var cookieParser = require('cookie-parser');
 var express = require('express');
 
+var User = require('./user').User;
 var UserDB = require('./usercredentials.js').UserCredentials(StringConst.USER_DB);
 var utils = require('./utils').Utils;
 
@@ -26,9 +27,59 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+var router = express.Router();
+
+router.use(function(req, res, next) {
+    next();
+});
+
+app.use('/api', router);
 app.set('port',  process.env.PORT || 3000);
 app.use(express.static(__dirname));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
+
+
+router.route('/users')
+    // API to create user
+    .post(function(req, res) {
+        var user = User();
+
+        // TODO - validate input
+
+        user.userID = req.body.userID;
+        // TODO - ensure request is valid (rate limit, etc)
+
+        // TODO - populate remaining fields
+        // TODO - return success/failure accordingly
+        res.json({message: "SUCCESS"});
+    });
+
+router.route('/users/:userID')
+
+    // API to get user by userID
+    .get(function(req, res) {
+
+        // TODO - ensure request is valid (rate limit, etc)
+
+        // TODO - validate input and return user
+    })
+
+    // API to update user by userID
+    .put(function(req, res) {
+
+        // TODO - ensure request is valid (rate limit, etc)
+
+        // TODO - validate input and return SUCCESS/FAILURE
+    })
+
+    // API to delete user by userID
+    .delete(function(req, res) {
+        // TODO - validate input and delete user
+
+        // TODO - ensure request is valid (rate limit, etc)
+
+        // TODO - return SUCCESS/FAILURE accordingly
+    });
 
 function displayPage(httpStatusCode, res, path, log, embeddedJavaScriptParams) {
 

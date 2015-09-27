@@ -3,7 +3,7 @@
  */
 
 var StringConst = require('./string_const').StringConst;
-var User = require('./user');
+var User = require('./user').User;
 
 var postgresDB = require('pg'); // postgres database module
 var client = new postgresDB.Client(StringConst.DB_CONNECTION_STRING);
@@ -84,7 +84,7 @@ exports.UserCredentials = function (tableName) {
                                 callback(null);
                             } else {
 
-                                var user = User.User();
+                                var user = User();
 
                                 if (result.rowCount == 1) {
 
@@ -120,14 +120,14 @@ exports.UserCredentials = function (tableName) {
                         + StringConst.FIRST_NAME + " = \'" + user.firstName + "\', "
                         + StringConst.LAST_NAME + " = \'" + user.lastName + "\', "
                         + StringConst.EMAIL + " = \'" + user.email + "\',"
-                        + Stringconst.PASSWORD + " = \'" + user.password + "\',"
+                        + StringConst.PASSWORD + " = \'" + user.password + "\',"
                         + StringConst.GENDER + " = \'" + user.gender + "\',"
                         + StringConst.WEIGHT_POUNDS + " = \'" + user.weightInPounds + "\',"
                         + StringConst.HEIGHT_INCHES + " = \'" + user.heightInInches + "\',"
                         + StringConst.DOB + " = \'" + user.dateOfBirth + "\',"
                         + StringConst.LAST_LOGIN_TIME + " = \'" + user.lastLoginTime + "\',"
                         + StringConst.LAST_LOGIN_TYPE + " = \'" + user.lastLoginType + "\',"
-                        + "\' WHERE " + StringConst.USER_ID + " = \'" + userID + "\', ",
+                        + " WHERE " + StringConst.USER_ID + " = \'" + userID + "\', ",
 
                         function(err, result) {
                             if (err) {
@@ -163,7 +163,7 @@ exports.UserCredentials = function (tableName) {
                         });
                 }
             } catch (err) {
-                console.log("!!Error in UserCredentials.deleteUser(): " + err);
+                console.log("Error in UserCredentials.deleteUser(): " + err);
                 callback(0);
             }
         }

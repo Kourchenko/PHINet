@@ -16,12 +16,12 @@ exports.analytics = function() {
          * @param data - array of values
          * @returns real valued mean
          */
-        mean : function(data) {
+        mean : function(data, callback) {
 
             if (data) {
                 var vector = new gauss.Vector(data);
 
-                return vector.mean();
+                callback(vector.mean());
             } else {
 
                 throw "!!Error: analytics.mean() input is invalid.";
@@ -34,12 +34,12 @@ exports.analytics = function() {
          * @param data - array of values
          * @returns real valued mode
          */
-        mode : function(data) {
+        mode : function(data, callback) {
 
             if (data) {
                 var vector = new gauss.Vector(data);
 
-                return vector.mode();
+                callback(vector.mode());
 
             } else {
                 throw "!!Error: analytics.mode() input is invalid.";
@@ -52,12 +52,12 @@ exports.analytics = function() {
          * @param data - array of values
          * @returns real valued median
          */
-        median: function(data) {
+        median: function(data, callback) {
 
             if (data) {
                 var vector = new gauss.Vector(data);
 
-                return vector.median();
+                callback(vector.median());
             } else {
                 throw "!!Error: analytics.median() input is invalid";
             }
