@@ -87,7 +87,6 @@ router.route('/users/:userID')
     // API to get user by userID
     .get(function(req, res) {
 
-
         // TODO - validate userID && also take password to verify user is legitimate
 
         UserDB.getUserByID(req.params.userID, function(user) {
@@ -97,7 +96,7 @@ router.route('/users/:userID')
                 res.json({message: "Successfully found user with userID: " + user.userID + " and email: " + user.email});
             } else {
                 res.statusCode = NO_CONTENT_HTTP_REQUEST_CODE;
-                res.json({message: "Failed to find user with userID: " + req.body.userID})
+                res.json({message: "Failed to find user with userID: " + req.params.userID})
             }
         });
 

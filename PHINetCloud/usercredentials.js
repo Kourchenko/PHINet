@@ -88,17 +88,17 @@ exports.UserCredentials = function (tableName) {
 
                                 if (result.rowCount == 1) {
 
-                                    user.userID = result.rows[0].userID;
-                                    user.firstName = result.rows[0].firstName;
-                                    user.lastName = result.rows[0].lastName;
+                                    user.userID = result.rows[0].userid;
+                                    user.firstName = result.rows[0].firstname;
+                                    user.lastName = result.rows[0].lastname;
                                     user.email = result.rows[0].email;
                                     user.password = result.rows[0].password;
                                     user.gender = result.rows[0].gender;
-                                    user.weightInPounds = result.rows[0].weightInPounds;
-                                    user.heightInInches =result.rows[0].heightInInches;
-                                    user.dateOfBirth = result.rows[0].dateOfBirth;
-                                    user.lastLoginTime = result.rows[0].lastLoginTime;
-                                    user.lastLoginType = result.rows[0].lastLoginType;
+                                    user.weightInPounds = result.rows[0].weightinpounds;
+                                    user.heightInInches =result.rows[0].heightininches;
+                                    user.dateOfBirth = result.rows[0].dateofbirth;
+                                    user.lastLoginTime = result.rows[0].lastlogintime;
+                                    user.lastLoginType = result.rows[0].lastlogintype;
                                 }
 
                                 callback(user);
