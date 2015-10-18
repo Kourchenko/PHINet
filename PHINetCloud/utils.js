@@ -12,14 +12,10 @@ exports.Utils = {
      * @param password input by user
      * @returns {boolean} determining validity of password
      */
-    isValidPassword: function(password, callback) {
+    isValidPassword: function(password) {
 
-        if (password) {
-            var regex = /^[a-zA-Z0-9_]{3,15}$/;
-            callback(regex.test(password));
-        } else {
-            callback(false);
-        }
+        var regex = /^[a-zA-Z0-9_]{3,15}$/;
+        return password && regex.test(password);
     },
 
     /**
@@ -28,16 +24,12 @@ exports.Utils = {
      * @param username input by user
      * @returns {boolean} determining validity of username
      */
-    isValidUserName: function(username, callback) {
+    isValidUserName: function(username) {
 
         // NOTE: keep username/password functions separate because syntax may change
 
-        if (username) {
-            var regex = /^[a-zA-Z0-9_]{3,15}$/;
-            callback(regex.test(username));
-        } else {
-            callback(false);
-        }
+        var regex = /^[a-zA-Z0-9_]{3,15}$/;
+        return username && regex.test(username);
     },
 
     /**
@@ -48,14 +40,10 @@ exports.Utils = {
      * @param email input by user
      * @returns {boolean} determining validity of email
      */
-    isValidEmail: function(email, callback) {
+    isValidEmail: function(email) {
 
-        if (email) {
-            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-            callback(re.test(email));
-        } else {
-            callback(false);
-        }
+        var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        return email && re.test(email);
     },
 
    /**
@@ -100,5 +88,20 @@ exports.Utils = {
                 callback(null, isPasswordMatch);
             });
         }
-	}
+	},
+
+    /**
+     * Expects and validates
+     *  - userID
+     *  - password
+     *  - email
+     */
+    isValidSignupRequest : function(request) {
+
+        // TODO - improve validations on password hash
+
+        return request && this.isValidEmail(request.email)
+                    && this.isValidUserName(request.userID)
+                    && request.password;
+    }
 };

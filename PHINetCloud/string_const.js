@@ -5,7 +5,7 @@
 
 exports.StringConst = {
 
-    DB_CONNECTION_STRING: "TODO",
+    DB_CONNECTION_STRING: "pt://phinetV2:phinetv2password@phinetv2.cunk36nc1e3u.us-west-2.rds.amazonaws.com:5432/phinetV2",
 
     // database tables
     USER_DB: "Users",

@@ -37,7 +37,7 @@ exports.UserCredentials = function (tableName) {
             try {
                 if (user) {
 
-                    client.query("INSERT INTO " + dbName + "("
+                    client.query("INSERT INTO " + dbName + " ("
                         + StringConst.USER_ID + ", "
                         + StringConst.FIRST_NAME + ", "
                         + StringConst.LAST_NAME + ", "
@@ -48,9 +48,9 @@ exports.UserCredentials = function (tableName) {
                         + StringConst.HEIGHT_INCHES + ", "
                         + StringConst.DOB + ", "
                         + StringConst.LAST_LOGIN_TIME + ", "
-                        + StringConst.LAST_LOGIN_TYPE + ", "
+                        + StringConst.LAST_LOGIN_TYPE
 
-                        + ") values($1, $2, $3, $4, $5, $6, $7)",
+                        + ") values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
                         [user.userID, user.firstName, user.lastName, user.email, user.password,
                             user.gender, user.weightInPounds, user.heightInInches, user.dateOfBirth,
                             user.lastLoginTime, user.lastLoginType],
@@ -126,8 +126,8 @@ exports.UserCredentials = function (tableName) {
                         + StringConst.HEIGHT_INCHES + " = \'" + user.heightInInches + "\',"
                         + StringConst.DOB + " = \'" + user.dateOfBirth + "\',"
                         + StringConst.LAST_LOGIN_TIME + " = \'" + user.lastLoginTime + "\',"
-                        + StringConst.LAST_LOGIN_TYPE + " = \'" + user.lastLoginType + "\',"
-                        + " WHERE " + StringConst.USER_ID + " = \'" + userID + "\', ",
+                        + StringConst.LAST_LOGIN_TYPE + " = \'" + user.lastLoginType + "\'"
+                        + " WHERE " + StringConst.USER_ID + " = \'" + userID + "\' ",
 
                         function(err, result) {
                             if (err) {
