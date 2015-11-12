@@ -94,8 +94,8 @@ exports.UserCredentials = function (tableName) {
                                     user.email = result.rows[0].email;
                                     user.password = result.rows[0].password;
                                     user.gender = result.rows[0].gender;
-                                    user.weightInPounds = result.rows[0].weightinpounds;
-                                    user.heightInInches =result.rows[0].heightininches;
+                                    user.weightInPounds = result.rows[0].weight;
+                                    user.heightInInches = result.rows[0].height;
                                     user.dateOfBirth = result.rows[0].dateofbirth;
                                     user.lastLoginTime = result.rows[0].lastlogintime;
                                     user.lastLoginType = result.rows[0].lastlogintype;
@@ -116,9 +116,9 @@ exports.UserCredentials = function (tableName) {
             try {
                 if (user) {
 
-                    client.query( "UPDATE " + dbName + " SET "
-                        + StringConst.FIRST_NAME + " = \'" + user.firstName + "\', "
-                        + StringConst.LAST_NAME + " = \'" + user.lastName + "\', "
+                    client.query( " UPDATE " + dbName + " SET "
+                        + StringConst.FIRST_NAME + " = \'" + user.firstName + "\',"
+                        + StringConst.LAST_NAME + " = \'" + user.lastName + "\',"
                         + StringConst.EMAIL + " = \'" + user.email + "\',"
                         + StringConst.PASSWORD + " = \'" + user.password + "\',"
                         + StringConst.GENDER + " = \'" + user.gender + "\',"
@@ -127,7 +127,7 @@ exports.UserCredentials = function (tableName) {
                         + StringConst.DOB + " = \'" + user.dateOfBirth + "\',"
                         + StringConst.LAST_LOGIN_TIME + " = \'" + user.lastLoginTime + "\',"
                         + StringConst.LAST_LOGIN_TYPE + " = \'" + user.lastLoginType + "\'"
-                        + " WHERE " + StringConst.USER_ID + " = \'" + userID + "\' ",
+                        + " WHERE " + StringConst.USER_ID + " = \'" + user.userID + "\'",
 
                         function(err, result) {
                             if (err) {
@@ -144,6 +144,58 @@ exports.UserCredentials = function (tableName) {
                 callback(0);
             }
         },
+
+        updateEmail: function(user, callback) {
+
+          try {
+            if (user) {
+
+              client.query(" UPDATE " + dbName + " SET "
+                + StringConst.EMAIL + " = \'" + user.email + "\'"
+                + " WHERE " + StringConst.USER_ID + " = \'" + user.userID + "\'",
+
+           function(err, result) {
+               if (err) {
+                   console.log("Error in UserCredentials.updateEmail()1: " + err);
+                   callback(0);
+               } else {
+
+                   callback(result.rowCount);
+               }
+           });
+          }
+           } catch (err) {
+             console.log("Error in UserCredentials.updateEmail()2: " + err);
+             callback(0);
+           }
+        },
+
+        updatefirstName: function(user, callback) {
+
+          try {
+            if (user) {
+              console.log("Updating first name...");
+
+              client.query(" UPDATE " + dbName + " SET "
+                + StringConst.FIRST_NAME + " = \'" + user.firstName + "\'"
+                + " WHERE " + StringConst.USER_ID + " = \'" + user.userID + "\'",
+
+           function(err, result) {
+               if (err) {
+                   console.log("Error in UserCredentials.updatefirstName(): " + err);
+                   callback(0);
+               } else {
+
+                   callback(result.rowCount);
+               }
+           });
+          }
+           } catch (err) {
+             console.log("Error in UserCredentials.updatefirstName(): " + err);
+             callback(0);
+           }
+        },
+
 
         deleteUser: function(userID, callback) {
 

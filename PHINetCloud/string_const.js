@@ -29,18 +29,22 @@ exports.StringConst = {
 
     createUserDB : function(dbName) {
 
-        return "CREATE TABLE " + dbName + "("
-            + this.USER_ID + " TEXT, "
-            + this.FIRST_NAME + " TEXT, "
-            + this.LAST_NAME + " TEXT, "
-            + this.EMAIL + " TEXT, "
-            + this.PASSWORD + " TEXT, "
-            + this.GENDER + " TEXT, "
-            + this.WEIGHT_POUNDS + " REAL, "
-            + this.HEIGHT_INCHES + " REAL, "
-            + this.DOB + " DATE, "
-            + this.LAST_LOGIN_TIME + " TIMESTAMP, "
-            + this.LAST_LOGIN_TYPE + " TEXT, "
-            + "PRIMARY KEY( " + this.USER_ID + " ))"
+
+        // Should be + ''
+        // not "REAL, "
+        // check console.log() for errors
+        return " CREATE TABLE " + dbName + " ( "
+            + this.USER_ID + " TEXT,"
+            + this.FIRST_NAME + " TEXT,"
+            + this.LAST_NAME + " TEXT,"
+            + this.EMAIL + " TEXT,"
+            + this.PASSWORD + " TEXT,"
+            + this.GENDER + " TEXT,"
+            + this.WEIGHT_POUNDS + " REAL,"
+            + this.HEIGHT_INCHES + " REAL,"
+            + this.DOB + " DATE,"
+            + this.LAST_LOGIN_TIME + " TIMESTAMP,"
+            + this.LAST_LOGIN_TYPE + " TEXT,"
+            + " PRIMARY KEY( " + this.USER_ID + " ))"
     }
 };

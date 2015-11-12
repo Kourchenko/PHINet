@@ -1,4 +1,4 @@
-/** 
+/**
  * File contains code for that functions as "main"
  * segment of execution for this web application
  **/
@@ -52,14 +52,13 @@ router.route('/users')
 
 
         // TODO - ensure request is valid (rate limit, etc)
-
-        if (utils.isValidSignupRequest(req.body)) {
+        if (utils.isValidSignupRequest(req.query)) {
 
             var user = User();
 
-            user.userID = req.body.userID;
-            user.email = req.body.email;
-            user.password = req.body.password;
+            user.userID = req.query.userID;
+            user.email = req.query.email;
+            user.password = req.query.password;
 
             // TODO - allow user to populate remaining fields via profile page
 
@@ -67,10 +66,10 @@ router.route('/users')
 
                 if (rowsTouched == 1) {
                     res.statusCode = CREATED_HTTP_REQUEST_CODE;
-                    res.json({message: "Successfully created user with userID: " + req.body.userID});
+                    res.json({message: "Successfully created user with userID: " + user.userID});
                 } else {
                     res.statusCode = INTERNAL_SERVER_ERROR_HTTP_REQUEST_CODE;
-                    res.json({message: "Sign up request for user with userID: " + req.body.userID
+                    res.json({message: "Sign up request for user with userID: " + user.userID
                             + " has passed validation but could not be stored in the database."})
                 }
             });
@@ -88,12 +87,20 @@ router.route('/users/:userID')
     .get(function(req, res) {
 
         // TODO - validate userID && also take password to verify user is legitimate
-
-        UserDB.getUserByID(req.params.userID, function(user) {
+          UserDB.getUserByID(req.params.userID, function(user) {
 
             if (user) {
                 res.statusCode = OK_HTTP_REQUEST_CODE;
-                res.json({message: "Successfully found user with userID: " + user.userID + " and email: " + user.email});
+                res.json({message:
+                        " " + user.firstName + " " + user.lastName + " was found. "
+                        + " Last Logged in : "  + user.lastLoginTime
+                        + " Logged in via: "    + user.lastLoginType
+                        + " UserID: "           + user.userID
+                        + " Email: "            + user.email
+                        + " Gender: "           + user.gender
+                        + " Weight in pounds: " + user.weightInPounds
+                        + " Height in inches: " + user.heightInInches
+                        + " Date of Birth: "    + user.dateOfBirth});
             } else {
                 res.statusCode = NO_CONTENT_HTTP_REQUEST_CODE;
                 res.json({message: "Failed to find user with userID: " + req.params.userID})
@@ -105,17 +112,58 @@ router.route('/users/:userID')
         // TODO - validate input and return user
     })
 
+
     // API to update user by userID
     .put(function(req, res) {
 
-        // TODO - ensure request is valid (rate limit, etc)
+      UserDB.getUserByID(req.params.userID, function(user) {
 
-        // TODO - validate input and return SUCCESS/FAILURE
+        if (user) {
+
+          var user = User();
+          user.userID = req.query.userID;
+          user.email = req.query.email;
+          user.firstName = req.query.firstName;
+          user.lastName = req.query.lastName;
+          user.gender = req.query.gender;
+          user.weightInPounds = req.query.weightInPounds;
+          user.heightInInches = req.query.heightInInches;
+          user.dateOfBirth = req.query.dateOfBirth;
+          user.lastLoginTime = req.query.lastLoginTime;
+          user.lastLoginType = req.query.lastLoginType;
+
+          console.log(user.userID + " + " + user.email + " + "
+                    + " + " + user.firstName + " + " + user.lastName
+                    + " + " + user.gender + " + " + user.weightInPounds
+                    + " + " + user.heightInInches + " + " + user.dateOfBirth
+                    + " + " + user.lastLoginTime + " + " + user.lastLoginType);
+
+          UserDB.updateUser(user, function(err) {
+            res.json("Updated user.");
+          });
+        }
+      });
     })
+
 
     // API to delete user by userID
     .delete(function(req, res) {
         // TODO - validate input and delete user
+
+          UserDB.getUserByID(req.params.userID, function(user) {
+
+            if (user) {
+              UserDB.deleteUser(req.params.userID, function(rowsTouched) {
+                if (rowsTouched == 1) {
+                res.json({ message: "Deleted user."});
+              } else {
+                res.json({message: user.userID + "not in database for deletion."});
+              }
+              })
+            } else {
+              res.json({message: "User:" + user.userID + " not in database for deletion."});
+            }
+          });
 
         // TODO - ensure request is valid (rate limit, etc)
 
