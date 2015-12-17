@@ -1,7 +1,7 @@
 package com.ndnhealthnet.androidudpclient.Utility;
 
 /**
- * File contains constants that are sent withing
+ * File contains constants that are sent within
  * packets to identify what processing should be invoked.
  *
  * Also contained are other useful constants.
